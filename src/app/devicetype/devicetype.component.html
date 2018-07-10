@@ -1,0 +1,38 @@
+
+<div>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <h2>Add Device Details</h2>
+    
+    <div class="container">
+      <form id="fnp" #productData="ngForm" (ngSubmit)="addNewProduct(productData.value)" [ngClass] = "'success'">
+        <div class="row">
+            <div class="col-25">
+              <label for="dtype">Device Type</label>
+            </div>
+        <div class="col-75">
+            <select id="dtype" name="devicetype" ngModel>
+              <option value="iotbootcamp">iotbootcamp</option>
+              <option value="cityWaterUsage">cityWaterUsage</option>
+              <option value="houseWaterUsage">houseWaterUsage</option>
+            </select>
+          </div>
+          </div>
+        <div class="row">
+          <div class="col-25">
+            <label for="dname" aria-required="true">Device Id</label>
+          </div>
+          <div class="col-75">
+            <input type="text" id="dname" name="devicename" placeholder="DEVICE ID..." ngModel>
+          </div>
+        </div>
+          <div class="row">
+          <input type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+    <h3 *ngIf="model.isAdded">{{model.auth}}</h3>
+  </div>
+  
+  <b><h3 *ngIf="model.isDeleted">Device {{model.deleted}} is successfully deleted</h3></b>
+  

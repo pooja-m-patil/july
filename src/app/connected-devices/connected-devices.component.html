@@ -1,0 +1,41 @@
+<div>
+
+  <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Index</th>
+          <th scope="col">Device Id</th>
+          <th scope="col">Location</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-active" *ngFor="let loc of location; let i=index;">
+          <td>{{i+1}}</td>
+          <td>{{loc._id}}</td>
+          <td>{{loc.locationname}}</td>
+          <td (click)="showGraph(loc.locationname)"><button type="button" class="btn btn-primary">Show Location on Map</button></td>
+          <td (click)="getData(loc._id)">
+            <button type="button" class="btn btn-primary">Get real time data</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+</div>
+
+<div *ngIf="chartData.length">
+  <h3>Line Chart</h3>
+  <div style="width: 50%;">
+    <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'"
+      (chartClick)="onChartClick($event)">
+    </canvas>
+  </div>
+</div>
+
+<div *ngIf="showMap">
+<agm-map [latitude]="latitude" [longitude]="longitude">
+  <agm-marker [latitude]="latitude" [longitude]="longitude">
+  </agm-marker>
+</agm-map>
+</div>

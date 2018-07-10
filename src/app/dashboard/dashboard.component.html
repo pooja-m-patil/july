@@ -1,0 +1,78 @@
+<!-- <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI" crossorigin="anonymous">
+<script type="text/javascript" src="Scripts/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="Scripts/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    var host = "startbootstrap.com";
+    if ((host == window.location.host) && (window.location.protocol != "https:"))
+      window.location.protocol = "https";
+  </script>
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI" crossorigin="anonymous">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link"  href="/dashboard">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/features" >Features</a>
+          <ol *ngIf="isfeature">
+            <li>If you loose your Authentication Token. You Can generate it from "Show Authentication Token"</li>
+          </ol>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li> -->
+      <!-- </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" placeholder="Search" type="text">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+<br>
+<button type="Devices" class="btn btn-primary btn-lg" (click)=fetchData()>Devices</button>
+&nbsp;
+<button type="button" class="btn btn-primary btn-lg" (click)=addToggle()>Add New Device</button>
+&nbsp;
+<button type="button" class="btn btn-primary btn-lg" (click)=DBData()>Generate new Authentication Token</button>
+&nbsp;
+<button type="button" class="btn btn-primary btn-lg" (click)=graph()>Show Graph</button>
+&nbsp;
+<a [routerLink]="['/retrivedata']">Data</a> -->
+
+<!-- <br> --> 
+<!-- <h3>Welcome {{model.uname}}</h3> -->
+<div class="item" style="background-image:  url('assets/images/water_splash_shutterstock_111547814-1502757469-7649.jpg');"></div>
+
+
+
+<marquee behavior="scroll" direction="left" scrollamount="16" >
+
+  <div class="productpic">
+    <a routerLink="/fetchdata"><img src="/assets/images/maxresdefaults.jpg" height="550" width="750">
+      <h2 class="captioncolumn"></h2>
+    </a> 
+ 
+
+  
+    <a routerLink="/graph"><img src="/assets/images/graph.jpg" height="550" width="750">
+      <h2 class="captioncolumn"></h2>
+    </a> 
+  
+
+  
+    <a routerLink="/features"><img src="/assets/images/training-features.jpg" height="550" width="750">
+      <h2 class="captioncolumn"></h2>
+    </a> 
+  </div>
+
+</marquee>

@@ -1,0 +1,67 @@
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/css/foundation.min.css">
+
+
+<div style="text-align:center; color:blue">{{msg}}</div>
+<br>
+<div class="span3 well well-large offset4" style="width:300px; margin:0 auto; text-align:center">
+  <h4>Registration form</h4>
+  <form (submit)="register(rForm.value)">
+    <div [formGroup]="rForm">
+      <div class="form-container">
+        <div class="row columns">
+          <input type="text" placeholder="Enter Email" formControlName="name" />
+          <div class="alert" *ngIf="!rForm.controls['name'].valid && rForm.controls['name'].touched" style="color:red">Enter your Email</div>
+          <br>
+          <input type="password" placeholder="Password" formControlName="pwd" />
+          <div class="alert" *ngIf="!rForm.controls['pwd'].valid && rForm.controls['pwd'].touched" style="color:red">Should contain atleast one Capital and small alphabet,Numerical,Special symbol. Length should be between 6 to 20</div>
+          <br>
+          <input type="password" placeholder="Confirm Password" formControlName="cpwd" />
+          <div style='color:#ff7355' *ngIf="rForm.get('pwd').value != rForm.get('cpwd').value && rForm.get('cpwd').value != ''">
+            Password does not match</div>
+          <br>
+
+          <input class="btn btn-success" type="submit" value="Create Account"> &nbsp; or
+          <a class="btn" href="/">Login</a>
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+  &nbsp;
+
+</div>
+<!-- <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script> -->
+
+
+<!-- <h3>{{model.message}}</h3> -->
+
+<!-- <div>
+    <form class="modal-content" (submit)="register($event)">
+      <div class="container">
+        <h1>Sign Up</h1>
+        <hr>
+        <label for="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" required>
+  
+        <label for="email"><b>Role</b></label>
+        <input type="text" placeholder="Enter Role" name="email" required>
+
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required>
+  
+        <label for="psw-repeat"><b>Confirm Password</b></label>
+        <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+        
+        <!-- <label>
+          <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
+        </label> -->
+<!-- 
+        <div class="clearfix">
+            <button type="button" class="cancelbtn">Cancel</button>
+            <button type="submit" class="signupbtn">Sign Up</button>
+          </div>
+      </div>
+    </form>
+  </div>  -->

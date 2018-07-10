@@ -1,0 +1,20 @@
+
+<header></header>
+<h3>Forgot Authentication Token........?????????/</h3>
+<br>
+<br>
+<form #devData="ngForm" name="abc" (ngSubmit)="DbData(devData.value)" [ngClass] = "'success'">
+  name: <input type="text" name="name" ngModel>
+  <input type="submit" value="Get my Data">
+</form>
+
+
+<!-- <form id="fnp" name="fnp" #productData="ngForm" (ngSubmit)="DbData(productData.value)" [ngClass] = "'success'">
+  <label>name: </label><input type="text" name="name" placeholder="name" ngModel><br>
+  <!-- <label>color: </label><input type="text" name="name" id="name" placeholder="name" ngModel><br> --> -->
+  <!-- <input type="submit" value="Get my Data" id="check" name="check">
+</form> --> -->
+
+<div *ngIf="isdbdata">
+
+</div>

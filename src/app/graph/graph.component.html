@@ -1,0 +1,119 @@
+
+    <div class="container">
+    
+      <ng-multiselect-dropdown
+      [placeholder]="'Select Cities'"
+      [data]="dropdownCityList"
+      [(ngModel)]="selectedCityItems"
+      [settings]="dropdownCitySettings"
+      (onSelect)="onCitySelect($event)"
+      (onSelectAll)="onCitySelectAll($event)"
+      (onDeSelect)="onCitySelect($event)"
+  >
+  </ng-multiselect-dropdown>
+  <br>
+  
+  
+  <ng-multiselect-dropdown *ngIf="dropdownAreaList.length"
+      (placeholder)="'Select Areas (atmost 2)'"
+      [data]="dropdownAreaList"
+      [(ngModel)]="selectedAreaItems"
+      [settings]="dropdownSettings"
+      (onSelect)="onAreaSelect($event)"
+      (onSelectAll)="onAreaSelectAll($event)"
+      (onDeSelect)="onAreaDeSelect($event)"
+  >
+  </ng-multiselect-dropdown>
+  
+  <br>
+
+      <form #event="ngForm" (ngSubmit)="graph(event.value)">
+        <label>Select Date :</label>
+        &nbsp;
+        &nbsp;
+        <input type="date" name="d1" ngModel />
+        &nbsp;
+        <input type="date" name="d2" ngModel />
+        &nbsp;
+        <input type="submit" value="Submit">
+      </form>
+  
+  <br>
+
+</div>
+
+   
+
+    <div *ngIf="status==selectedAreaItems.length && chartData2.length">
+      <h3>Line Chart</h3>
+      <div style="width: 50%;">
+          <canvas 
+            baseChart
+          [datasets]="chartData2"
+          [labels]="date"
+          [options]="chartOptions"
+          [legend]="true"
+          [chartType]="'line'"
+          (chartClick)="onChartClick($event)">
+        </canvas>
+        </div> 
+
+ 
+      <h3>Bar Chart</h3>
+      <div>
+          <div style="display: block" style="width: 50%;">
+            <canvas baseChart
+                    [datasets]="chartData2"
+                    [labels]="date"
+                    [options]="ChartOptions"
+                    [legend]="barChartLegend"
+                    [chartType]="'bar'"></canvas>
+          </div>
+        </div>
+        
+
+  
+      <h3>Pie Chart</h3>
+      <div>
+
+          <div style="display: block" style="width: 50%;">
+            <canvas baseChart
+                    [datasets]="chartData2"
+                    [labels]="date"
+                    [chartType]="'pie'"
+                    [options]="ChartOptions"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+          </div>
+          </div>
+
+ 
+</div>
+  <!-- <td>
+ 
+    <div style="display: block" style="width: 50%;">
+      <canvas baseChart
+              [datasets]="chartData2"
+              [labels]="date"
+              [chartType]="'radar'"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"></canvas>
+              </div>
+  </td>
+  </tr>
+  <tr>
+    <td>
+      <div style="width: 50%;">
+        <canvas baseChart
+                    [datasets]="chartData2"
+                    [labels]="date"
+                    [chartType]="'doughnut'"
+                    [legend]="true"
+                    ></canvas>
+      </div>
+      </td> -->
+
+
+
+
+

@@ -1,0 +1,34 @@
+
+<h3 style="text-align:center; color:blue"><b>Connection Requests</b></h3>
+<div>
+
+  <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Index</th>
+          <th scope="col">Username</th>
+          <th scope="col">Location Name</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-active" *ngFor="let device of connRequests; let i=index;">
+          <td>{{i+1}}</td>
+          <td>{{device.username}}</td>
+          <td>{{device.locationname}}</td>
+          <td>{{device.latitude}}</td>
+          <td>{{device.longitude}}</td>
+          <td (click)="addDevice(i+1,device.username,device.locationname,device.latitude,device.longitude)"><button>Create Connection</button>
+          </td>
+        
+          <!-- <td (click)="deleteDevice(device.deviceId)" id="i" ng-value="myVar"><button type="button" class="btn btn-danger disabled">DELETE</button></td>
+          <td (click)="showAuth(device)"><button type="button" class="btn btn-primary">Show Authentication Token</button></td>
+          <td >{{device['authToken']}}</td> -->
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<div style="text-align:center; color:green">{{auth}}</div>

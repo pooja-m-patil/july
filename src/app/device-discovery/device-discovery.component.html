@@ -1,0 +1,25 @@
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- <input type="button" value="Discover" (click)="discover()"> -->
+<div *ngIf="remoteDevices.length==0">{{msg}}</div>
+
+<table class="table table-hover" *ngIf="showdiv" border=1>
+    <thead>
+        <tr>
+          <th scope="col">Index</th>
+          <th scope="col">Device Id</th>
+          <th></th>
+        </tr>
+      </thead>
+  <tbody>
+    <tr class="table-active" *ngFor="let device of remoteDevices; let i=index;">
+     <td>{{i+1}}</td>
+     <td>{{device}}</td>
+     <td (click)="discdevice(device)"><button>Add</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 *ngIf="isAdded" style="text-align:center; color:green">{{temp}}</h3>
+
+

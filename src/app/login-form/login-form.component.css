@@ -1,0 +1,36 @@
+:host {
+    flex-grow:1;
+    position:relative;
+    justify-content:center;
+    align-items:center;
+}
+
+/* div.input {
+    position:relative;
+} */
+
+div.input label {
+    position: absolute;
+    top:0;
+    left:50px;
+    background:white;
+     padding:0px 0px; 
+}
+
+div.input input {
+    padding:10px 20px;
+    font-size:25px;
+    outline:0;
+}
+
+/* hr {
+    border: 1px solid #f1f1f1;
+} */
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+}

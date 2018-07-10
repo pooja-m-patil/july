@@ -1,0 +1,22 @@
+
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+
+
+
+<div style="text-align:center; color:red">{{model.errmsg}}</div>
+<br>
+<div id="login" class="span3 well well-large offset4" style="width:300px; margin:0 auto; text-align:center">
+
+  <h4>Login</h4>
+    <form class="form" (submit)="loginUser($event)">
+      <input type="text" placeholder="Username" />
+      <br>
+      <input type="password" placeholder="Password" />
+     <br>
+      <input class="btn btn-success" type="submit" value="Login" /> or <a class="btn" href="/signup">Create Account</a>
+    </form>
+</div>
+ 
+
+
+<!-- <h3>{{model.message}}</h3> -->

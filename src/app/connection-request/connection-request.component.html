@@ -1,0 +1,45 @@
+<!-- 
+<div>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <h2 align="center">Request for new connection</h2>
+  
+  <div class="container">
+    <form id="fnp" #deviceData="ngForm" (ngSubmit)="reqNewDevice($event); deviceData.reset()" [ngClass] = "'success'">
+      <div class="row">
+        <div class="col-25">
+          <label for="dname" aria-required="true">Location Name :</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="dname" name="locationname" placeholder="Eg. Baner" ngModel>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="cname">Select Location on Map :</label>
+        </div>
+        <div class="col-75">
+          <agm-map [latitude]="latitude" [longitude]="longitude" id="cname" name="locationcoords" (mapClick)="Coords($event)" ngModel>
+            <agm-marker [latitude]="latitude" [longitude]="longitude" name="locationcoords" ngModel></agm-marker>
+          </agm-map>
+        </div>
+      </div>
+      <div class="row">
+        <input type="submit" value="Submit">
+      </div>
+    </form>
+  </div>
+  <h3 style="text-align:center; color:green"><b>{{msg}}</b></h3>
+</div> -->
+<h3 style="text-align:center; color:green"><b>{{msg}}</b></h3>
+<form (submit)="reqNewDevice($event)">
+    <h3 style="text-align:center; color:black"><b>Select Location on Map</b></h3>
+  <agm-map [latitude]="latitude" [longitude]="longitude" id="cname" name="locationcoords" (mapClick)="Coords($event)" ngModel>
+    <agm-marker [latitude]="latitude" [longitude]="longitude" name="locationcoords"></agm-marker>
+  </agm-map>
+  <br>
+  <input type="text" id="locname" placeholder="Enter Location Name" style="position: absolute; left:40%; width:11%">
+  <input type="submit" value="submit" style="position: absolute; left:52%; width:8%">
+</form>
+
+
