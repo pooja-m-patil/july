@@ -1,7 +1,5 @@
-<!-- <div id="fullPage"> -->
-  <app-header></app-header>
-<app-navbar></app-navbar>
-  <!-- <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI"
+<div id="fullPage">
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.0.0/cosmo/bootstrap.min.css" rel="stylesheet" integrity="sha384-UU2jkdv1M9UEjLje/kygVxqMBq9Jrg9z+Gqvw972H6BqKTzDvLaRJfK7PnzLM4SI"
     crossorigin="anonymous">
 
   <div *ngIf="user.getLog()=='admin'">
@@ -25,7 +23,6 @@
                   <option value="" disabled selected>Devices</option>
                   <option value='fetchdata'>Device List</option>
                   <option value='devicediscovery'>Discover Devices</option>
-                  <option value='registeredDevices'>Registered Devices</option>
                 </select>
               </div>
             </li>
@@ -46,6 +43,9 @@
               <a routerLink="/graph">Show Graph</a>
             </li>
 
+            <li>
+              <a routerLink="/device-usage">Device Usage</a>
+            </li>
 
 
             <table border=1 *ngIf="user.returnCount()==true">
@@ -95,6 +95,10 @@
               <a routerLink="/reqconnection">Connection Request</a>
             </li>
 
+            <li>
+              <a routerLink="/device-usage">User Water Usage</a>
+            </li>
+
           </ul>
         </div>
 
@@ -112,9 +116,7 @@
       </div>
     </nav>
     <br>
-  </div> --> 
-
-  <router-outlet></router-outlet>
+  </div>
 
   <!-- <select class="my-select col s12" #chat (change)="watson(chat.value)">
   <option value="" disabled selected>Chatbox</option>
@@ -124,7 +126,7 @@
 </select> -->
 
 
-<!-- <div id="chatdiv" *ngIf="user.getLog()">
+<div id="chatdiv" *ngIf="user.getLog()">
   <div class="chatbox" *ngIf="showDiv">
     <table class="table table-hover">
           <tr class="table-active" *ngFor="let msg of messages; let i=index;" [class.right]="msg.self">
@@ -137,4 +139,4 @@
     </form>
   </div>
   <button class="chatButton" style="right:1%; bottom: 1%; position:fixed;"  (click)="toggleDiv()">Chatbox</button>
-</div> -->
+</div>

@@ -1,6 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+// import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { BlueColorDirective } from './blue-color.directive';
@@ -30,117 +31,97 @@ import { AgmCoreModule } from '@agm/core';
 import { MappingDevicesComponent } from './mapping-devices/mapping-devices.component';
 import { AdminConnectionListComponent } from './admin-connection-list/admin-connection-list.component';
 import { ChatboxComponent } from './chatbox/chatbox.component';
-import {NavbarComponent } from './navbar/navbar.component';
-import { DeviceUsageComponent} from './device-usage/device-usage.component'
+import { NavbarComponent } from './navbar/navbar.component';
+import { AppRoutingModule } from './app-routing.module';
+import { DeviceUsageComponent } from './device-usage/device-usage.component';
 //import {GoogleMapsAPIWrapper} from "angular2-google-maps/core/services/google-maps-api-wrapper"
-//import {MapsAPILoader} from '@agm/core';
 
-
-
-//import {AppRoutingModule} from './app-routing.module';
-//import { Model } from './model';
-
-const appRoutes:Routes=[
-  
-  {
-    path:'signup',
-    component:SignupComponent
-  },
-  {
-    path:'',
-    component:LoginFormComponent
-  },
-  // { path: '', redirectTo: '/app-login-form', pathMatch: 'full' },
-  {
-      path:'dashboard',
+const routes: Routes = [
+    {
+        path:'dashboard',
+        canActivate:[AuthguardGuard],
+        component:DashboardComponent
+    },
+    {
+      path:'fetchdata',
       canActivate:[AuthguardGuard],
-      component:DashboardComponent
+      component:FetchdataComponent
   },
   {
-    path:'fetchdata',
+    path:'add-device',
     canActivate:[AuthguardGuard],
-    component:FetchdataComponent
-},
-{
-  path:'add-device',
-  canActivate:[AuthguardGuard],
-  component:AddDeviceComponent
-},
-{
-  path:'graph',
-  canActivate:[AuthguardGuard],
-  component:GraphComponent
-},
-{
-  path:'features',
-  canActivate:[AuthguardGuard],
-  component:FeaturesComponent
-},
+    component:AddDeviceComponent
+  },
   {
-    path:'retrivedata',
+    path:'graph',
     canActivate:[AuthguardGuard],
-    component:RetrivedataComponent
-},
-{
-  path:'devicediscovery',
-  canActivate:[AuthguardGuard],
-  component:DeviceDiscoveryComponent
-},
-{
-  path:'devicetype',
-  canActivate:[AuthguardGuard],
-  component:DevicetypeComponent
-},
-{
-  path:'reqconnection',
-  canActivate:[AuthguardGuard],
-  component:ConnectionRequestComponent
-},
-{
-  path:'requested_conn',
-  canActivate:[AuthguardGuard],
-  component:RequestedConnectionComponent
-},
-{
-  path:'mapping-devices',
-  canActivate:[AuthguardGuard],
-  component:MappingDevicesComponent
-},
-{
-  path:'connected-devices',
-  canActivate:[AuthguardGuard],
-  component:ConnectedDevicesComponent
-},
-{
-  path:'admin-connections',
-  canActivate:[AuthguardGuard],
-  component:AdminConnectionListComponent
-},
-{
-  path:'chatbox',
-  canActivate:[AuthguardGuard],
-  component:ChatboxComponent
-},
-{
-  path:'device-usage',
-  canActivate:[AuthguardGuard],
-  component:DeviceUsageComponent
-}
-
-
-
-
-
-]
-
+    component:GraphComponent
+  },
+  {
+    path:'features',
+    canActivate:[AuthguardGuard],
+    component:FeaturesComponent
+  },
+    {
+      path:'retrivedata',
+      canActivate:[AuthguardGuard],
+      component:RetrivedataComponent
+  },
+  {
+    path:'devicediscovery',
+    canActivate:[AuthguardGuard],
+    component:DeviceDiscoveryComponent
+  },
+  {
+    path:'devicetype',
+    canActivate:[AuthguardGuard],
+    component:DevicetypeComponent
+  },
+  {
+    path:'reqconnection',
+    canActivate:[AuthguardGuard],
+    component:ConnectionRequestComponent
+  },
+  {
+    path:'requested_conn',
+    canActivate:[AuthguardGuard],
+    component:RequestedConnectionComponent
+  },
+  {
+    path:'mapping-devices',
+    canActivate:[AuthguardGuard],
+    component:MappingDevicesComponent
+  },
+  {
+    path:'connected-devices',
+    canActivate:[AuthguardGuard],
+    component:ConnectedDevicesComponent
+  },
+  {
+    path:'admin-connections',
+    canActivate:[AuthguardGuard],
+    component:AdminConnectionListComponent
+  },
+  {
+    path:'chatbox',
+    canActivate:[AuthguardGuard],
+    component:ChatboxComponent
+  },
+  {
+    path:'device-usage',
+    canActivate:[AuthguardGuard],
+    component:DeviceUsageComponent
+  }
+  
+];
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HeaderComponent,
-    BlueColorDirective,
-    LoginFormComponent,
-    FooterComponent,
+    //AppComponent,
+    // HeaderComponent,
+    // BlueColorDirective,
+     //LoginFormComponent,
+    // FooterComponent,
     DashboardComponent,
     RetrivedataComponent,
     AddDeviceComponent,
@@ -149,33 +130,39 @@ const appRoutes:Routes=[
     FetchdataComponent,
     DeviceDiscoveryComponent,
     DevicetypeComponent,
-    SignupComponent,
+    // SignupComponent,
     ConnectionRequestComponent,
     ConnectedDevicesComponent,
     RequestedConnectionComponent,
     MappingDevicesComponent,
     AdminConnectionListComponent,
     ChatboxComponent,
-    NavbarComponent,
     DeviceUsageComponent
+
     
   ],
   imports: [
-    RouterModule.forRoot(appRoutes),
-    //RouterModule.forRoot(dashRoutes),
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    ChartsModule,
-    LocalStorageModule,
+    CommonModule,
+    RouterModule.forChild(routes),
     AgmCoreModule.forRoot({
       apiKey:'AIzaSyBTDyDZ0rmFgml50uuXJdEK0vwMWmn8EqY'
     }),
-    NgMultiSelectDropDownModule.forRoot()
-    //AppRoutingModule
+      // apiKey:'AIzaSyBTDyDZ0rmFgml50uuXJdEK0vwMWmn8EqY'
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+     HttpModule,
+     ChartsModule,
+     LocalStorageModule,
+     NgMultiSelectDropDownModule
   ],
-  providers: [UserService,AuthguardGuard,DataService],
-  bootstrap: [AppComponent]
+  exports:[
+    AgmCoreModule,
+    NgMultiSelectDropDownModule
+  ],
+  providers:[
+   // GoogleMapsAPIWrapper
+  ]
 })
-export class AppModule { }
+
+export class AfterloginModule { }

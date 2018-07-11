@@ -1,0 +1,23 @@
+<h3 style="text-align:center; color:green"><b>{{connMsg}}</b></h3>
+<div>
+  <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Index</th>
+          <th scope="col">Username</th>
+          <th scope="col">Device Id</th>
+          <th scope="col">Usage</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="table-active" *ngFor="let device of deviceUsage; let i=index;">
+          <td>{{i+1}}</td>
+          <td>{{device.uname}}</td>
+          <td>{{device.deviceId}}</td>
+          <td>{{device.usage}}</td>
+          <td><button (click)="stopConn(device.deviceId)">Stop Connection</button></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
