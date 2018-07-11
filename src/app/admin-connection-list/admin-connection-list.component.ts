@@ -23,6 +23,7 @@ export class AdminConnectionListComponent implements OnInit {
   userRegDevices=[];
   displayDevices=[];
   userData=[];
+  deviceObj:object;
 
   constructor(private http: Http, private dataService: DataService,private user:UserService) { }
 
@@ -91,8 +92,9 @@ export class AdminConnectionListComponent implements OnInit {
   connectDevice=function(dId){
     console.log("connect");
     console.log(dId);
+    this.confirmObj["devId"]=dId;
 
-    this.http.post("http://localhost:3000/display/confirmReq",this.confirmObj).subscribe((res:Response) => 
+    this.http.post("http://localhost:3000/display/editConn",this.confirmObj).subscribe((res:Response) => 
     {
         console.log(res);
         console.log(res.ok);

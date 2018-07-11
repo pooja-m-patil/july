@@ -56,4 +56,14 @@ export class DataService {
     });
     });
     }
+
+
+    public getDeviceUsage = () => {
+      //this.socket=socketIo('http://localhost:3000');
+      return Observable.create((observer) => {
+      this.socket.on('total device usage', (message) => {
+      observer.next(message);
+      });
+      });
+      }
 }

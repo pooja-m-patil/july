@@ -92,6 +92,60 @@ app.post("/confirmReq", function (request, response) {
   });
 })
 
+
+app.post("/editConn", function (request, response) {
+
+  var uname = request.body.username;
+  var locname = request.body.locationname;
+  var lat = request.body.latitude;
+  var lng = request.body.longitude;
+  var dId = request.body.deviceId;
+  var newDId=request.body.devId;
+
+console.log(uname+" "+locname+" "+newDId);
+
+  fetchDoc1.fetchDoc(dId, function (data1) {
+    console.log(data1);
+    var devId = data1.docs[0]._id;
+    var data = data1.docs[0].data;
+
+
+
+
+  rev.getRevOfCnfDevices(lat, lng, function (data) {
+
+    console.log(data);
+    var options = {
+      method: 'DELETE',
+      url: 'https://722fa7b8-0c41-4d59-ac8c-1c02d25eaef5-bluemix.cloudant.com/confirmed_request/'+data._id,
+      qs: { rev: data._rev },
+      headers:
+        {
+          'postman-token': 'a84462a0-1404-84c6-2681-a51bcf22bea1',
+          'cache-control': 'no-cache',
+          authorization: 'Basic NzIyZmE3YjgtMGM0MS00ZDU5LWFjOGMtMWMwMmQyNWVhZWY1LWJsdWVtaXg6YjdkZGQyOGJmNzU1ODk1Nzg4NjA3NDU3YmRmMjgyZGJmNzJkY2EzMTg3YzA1ZDIwMTZjYjAzNGU5MDI1MDFhNw==',
+          'content-type': 'application/json'
+        }
+    };
+
+    req(options, function (error, response, body) {
+      if (error) throw new Error(error);
+
+      console.log(body);
+
+      confirm.confirmUserReq(newDId, data1, uname, locname, lat, lng, function (data){
+        console.log(data);
+        console.log("data");
+      });
+    });
+
+  })
+})
+
+});
+
+
+
 // app.delete("/delRegD", function (request, response) {
 //   var dId=request.body.dId;
 //   del.delRegDev(dId,function(data){

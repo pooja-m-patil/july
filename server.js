@@ -18,6 +18,10 @@ var deviceId;
 var temp;
 var socket1;
 var initArray = [];
+var Client = require("ibmiotf");
+var totalUsage = 0;
+var devData = require('./src/admin_calls/deviceDataUsage');
+var allDevUsage = [];
 
 var server = app.listen(3000, function () {
   console.log("Listening on port:3000");
@@ -138,15 +142,15 @@ app.post("/remoteApp", function (req, res) {
 
 app.post("/real-time-data", function (req, res) {
 
-  var Client = require("ibmiotf");
-  var loc=req.body.location;
+
+  var loc = req.body.location;
   console.log(loc);
 
   var appClientConfig = {
     "org": 'tgacg8',
     "id": 'myapp',
-    "auth-key":'a-tgacg8-p3heyf1c1g',
-    "auth-token":'oFmcgTeiCBw@Q4*vj('
+    "auth-key": 'a-tgacg8-p3heyf1c1g',
+    "auth-token": 'oFmcgTeiCBw@Q4*vj('
   };
 
   var appClient = new Client.IotfApplication(appClientConfig);
@@ -157,18 +161,87 @@ app.post("/real-time-data", function (req, res) {
   appClient.on("connect", function () {
 
     appClient.subscribeToDeviceEvents("+", loc, "status");
-    
+
   });
 
   appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, payload) {
 
-    console.log("Device Event from :: "+deviceType+" : "+deviceId+" of event "+eventType+" with payload : "+payload);
-    var temp=JSON.parse(payload);
+    console.log("Device Event from :: " + deviceType + " : " + deviceId + " of event " + eventType + " with payload : " + payload);
+    var temp = JSON.parse(payload);
     console.log(temp.d.usage)
-    socket1.emit("device data",{"usage":temp.d.usage,"time":temp.d.time});
-});
-res.send("data");
+    socket1.emit("device data", { "usage": temp.d.usage, "time": temp.d.time });
+  });
+  res.send("data");
 })
+
+
+var appClientConfig = {
+  "org": 'tgacg8',
+  "id": 'myapp',
+  "auth-key": 'a-tgacg8-p3heyf1c1g',
+  "auth-token": 'oFmcgTeiCBw@Q4*vj('
+};
+
+var appClient = new Client.IotfApplication(appClientConfig);
+
+
+appClient.connect();
+
+appClient.on("connect", function () {
+
+  appClient.subscribeToDeviceEvents("+", '+', "status");
+
+});
+
+appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, payload) {
+
+  console.log("Device Event from :: " + deviceType + " : " + deviceId + " of event " + eventType + " with payload : " + payload);
+  var temp = JSON.parse(payload);
+  console.log(temp);
+  console.log(temp.d.deviceId)
+  var devId = temp.d.deviceId;
+
+  devData.getDeviceData(devId, function (data) {
+    totalUsage = 0;
+
+    for (let i = 0; i < data.docs.length; i++) {
+      totalUsage = totalUsage + data.docs[i].data.d.usage;
+    }
+    // console.log(data.docs[0].data);
+    // console.log(data.docs[1].data);
+
+
+    console.log(totalUsage);
+    if (allDevUsage.length) {
+      for (let i = 0; i < allDevUsage.length; i++) {
+        if (allDevUsage[i].deviceId == devId) {
+          allDevUsage[i].usage = totalUsage;
+          socket1.emit("total device usage", allDevUsage);
+          console.log(allDevUsage);
+        }
+        else {
+          allDevUsage.push({ "deviceId": devId, "usage": totalUsage });
+          socket1.emit("total device usage", allDevUsage);
+          console.log(allDevUsage);
+        }
+      }
+    }
+    else {
+      allDevUsage.push({ "deviceId": devId, "usage": totalUsage });
+      socket1.emit("total device usage", allDevUsage);
+      console.log(allDevUsage);
+
+    }
+    //console.log(allDevUsage);
+   
+    if (totalUsage > '200') {
+      appClient.publishDeviceCommand("iotbootcamp", devId, "reboot", "json", { "status": "close" });
+      appClient.disconnect();
+    }
+  })
+  //socket1.emit("device data",{"usage":temp.d.usage,"time":temp.d.time});
+});
+
 
 
 app.get("/initarray", function (req, res) {
