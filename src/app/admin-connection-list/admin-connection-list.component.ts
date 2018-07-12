@@ -24,11 +24,13 @@ export class AdminConnectionListComponent implements OnInit {
   displayDevices=[];
   userData=[];
   deviceObj:object;
+  showDataGraph:boolean=false;
 
   constructor(private http: Http, private dataService: DataService,private user:UserService) { }
 
-  showGraph = function (uname,loc,lat,lng,dId) {
+  showMap = function (uname,loc,lat,lng,dId) {
     console.log(loc);
+    this.showDataGraph=false;
     for (let i = 0; i < this.connList.length; i++) {
       if (loc == this.connList[i].locationname) {
         this.latitude = parseFloat(this.connList[i].latitude);
@@ -64,6 +66,10 @@ export class AdminConnectionListComponent implements OnInit {
 
   getData = function (dId) {
     console.log(dId);
+
+    this.showMapToAdmin=false;
+    this.showMapToUser=false;
+    this.showDataGraph=true;
 
     this.locObj={
       location:dId

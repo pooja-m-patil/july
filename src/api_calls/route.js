@@ -175,13 +175,18 @@ app.delete("/del", function (request, response) {
 });
 
 app.post("/graph", function (request, response) {
-  var m1 = request.body.m;
-  var id = request.body.array;
-  server1.getData(m1, id, function (data) {
+
+  var d1 = request.body.d1;
+  var d2 = request.body.d2;
+  var dId = request.body.dId;
+
+  server1.getData(d1,d2,dId, function (data) {
     console.log(data);
     response.send(data);
   });
-});
+
+})
+
 
 app.get("/mapping", function (request, response) {
   map.getData(function (data) {

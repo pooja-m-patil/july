@@ -23,6 +23,7 @@ var totalUsage = 0;
 var devData = require('./src/admin_calls/deviceDataUsage');
 var allDevUsage = [];
 var rejectDevices=[];
+var deviceIdPresent=false;
 
 var server = app.listen(3000, function () {
   console.log("Listening on port:3000");
@@ -202,11 +203,13 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
 
   //console.log("Device Event from :: " + deviceType + " : " + deviceId + " of event " + eventType + " with payload : " + payload);
   var temp = JSON.parse(payload);
-  //console.log(temp);
+  console.log(temp);
   //console.log(temp.d.deviceId)
   var devId = temp.d.deviceId;
 
   devData.getDeviceData(devId, function (data) {
+
+    deviceIdPresent=false;
     totalUsage = 0;
     //console.log(data);
 
@@ -228,29 +231,32 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
         if (allDevUsage[i].deviceId == devId) {
           allDevUsage[i].usage = totalUsage;
           //console.log(allDevUsage);
+          deviceIdPresent=true;
         }
-        else {
-          allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage });
-          //console.log(allDevUsage);
-        }
+      }
+      if(deviceIdPresent==false){
+        console.log("add device");
+        allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage });
+        console.log(allDevUsage);
       }
     }
     else {
       allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage });
-      //console.log(allDevUsage);
-      socket1.emit("total device usage", allDevUsage);
+      console.log(allDevUsage);
+      //socket1.emit("total device usage", allDevUsage);
 
     }
 
     for(let i=0;i<allDevUsage.length;i++){
       console.log("for loop");
+      console.log(rejectDevices);
+      console.log(allDevUsage)
       if(rejectDevices.includes(allDevUsage[i].deviceId)){
         appClient.publishDeviceCommand("iotbootcamp", allDevUsage[i].deviceId, "reboot", "json", { "status": "close" });
         allDevUsage.splice(i,1);
+        socket1.emit("total device usage", allDevUsage);
         console.log("dev");
         console.log(allDevUsage);
-          
-      
       }
     }
     socket1.emit("total device usage", allDevUsage);

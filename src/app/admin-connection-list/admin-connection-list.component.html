@@ -16,7 +16,7 @@
         <td>{{list._id}}</td>
         <td>{{list.username}}</td>
         <td>{{list.locationname}}</td>
-        <td (click)="showGraph(list.username,list.locationname,list.latitude,list.longitude,list._id)">
+        <td (click)="showMap(list.username,list.locationname,list.latitude,list.longitude,list._id)">
           <button type="button" class="btn btn-primary">Show Location on Map</button>
         </td>
         <td (click)="getData(list._id)">
@@ -27,7 +27,7 @@
   </table>
 
 </div>
-
+<div>
 <div class="col-sm-3" style="top: 0cm">
   <table class="table table-hover" align="left" border=1>
         <th style="background-color: lightslategrey; color: white">Device Id</th>
@@ -37,12 +37,6 @@
   </table>
 </div>
 
-<div *ngIf="chartData.length">
-  <h3>Line Chart</h3>
-  <div style="width: 50%;">
-    <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
-    </canvas>
-  </div>
 </div>
 
 <div *ngIf="showMapToAdmin">
@@ -61,4 +55,9 @@
     <agm-marker [latitude]="latitude" [longitude]="longitude">
     </agm-marker>
     </agm-map>
+</div>
+
+<div *ngIf="chartData.length && showDataGraph" style="width:100ch; height:100ch;">
+    <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
+    </canvas>
 </div>
