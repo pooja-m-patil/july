@@ -7,6 +7,7 @@
           <th scope="col">Username</th>
           <th scope="col">Device Id</th>
           <th scope="col">Usage</th>
+          <th scope="col">Status</th>
           <th></th>
         </tr>
       </thead>
@@ -16,7 +17,9 @@
           <td>{{device.uname}}</td>
           <td>{{device.deviceId}}</td>
           <td>{{device.usage}}</td>
+          <td>{{device.status}}</td>
           <td><button (click)="stopConn(device.deviceId)">Stop Connection</button></td>
+          <td><button (click)="restartConn(device.deviceId)">Restart Connection</button></td>
         </tr>
       </tbody>
     </table>

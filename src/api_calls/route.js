@@ -181,6 +181,7 @@ app.post("/graph", function (request, response) {
   var dId = request.body.dId;
 
   server1.getData(d1,d2,dId, function (data) {
+    console.log(d1+" "+d2+" "+dId);
     console.log(data);
     response.send(data);
   });

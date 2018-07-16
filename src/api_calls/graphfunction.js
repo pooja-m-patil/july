@@ -9,6 +9,8 @@ temp: any = {};
 exports.getData = function (d1, d2, dId, callback) {
 
   console.log("getData");
+  console.log(d1);
+  console.log(d2);
 
   var options = {
     method: 'POST',

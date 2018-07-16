@@ -12,6 +12,7 @@ var fetchDoc1 = require('../api_calls/fetchWholeDoc');
 var list = require('../admin_calls/connList')
 var rev = require('../admin_calls/rev');
 var req = require("request");
+var devData = require('../admin_calls/deviceDataUsage');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -144,6 +145,12 @@ console.log(uname+" "+locname+" "+newDId);
 
 });
 
+app.get("/getRealTimeData", function (request, response) {
+  console.log("real time data");
+devData.getDeviceData(function (data2) {
+response.send(data2);
+})
+})
 
 
 // app.delete("/delRegD", function (request, response) {

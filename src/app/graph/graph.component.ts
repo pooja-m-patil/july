@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { BaseChartDirective } from "ng2-charts/ng2-charts";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { empty } from 'rxjs/Observer';
 
 @Component({
   selector: 'app-graph',
@@ -24,6 +25,8 @@ export class GraphComponent implements OnInit {
   monthDate: object;
   dt: number = 0;
   date12: object;
+  totalLength:number=0;
+  dbFetch:number=0;
 
   dropdownCityList = [];
   selectedCityItems = [];
@@ -33,6 +36,7 @@ export class GraphComponent implements OnInit {
   selectedAreaItems = [];
   dropdownAreaSettings = {};
   myarray: number[][] = new Array;
+  dbData=[];
 
   constructor(private http: Http) {
 
@@ -59,41 +63,26 @@ export class GraphComponent implements OnInit {
         }
       }
       this.dropdownAreaList = this.ref;
-      console.log(this.dropdownAreaList);
-
-      //   this.dropdownAreaSettings = {
-      //     singleSelection: false,
-      //     idField: 'item_id',
-      //     textField: 'item_text',
-      //     selectAllText: 'Select All',
-      //     unSelectAllText: 'UnSelect All',
-      //     itemsShowLimit: 3,
-      //     allowSearchFilter: true
-      // };
     })
   }
 
 
   graph = function (e) {
+    this.dbFetch=0;
+    this.totalLength=0;
     this.status = 0;
     this.chartData2 = [];
     this.chartLabels = [];
     this.date = [];
+    this.myarray = new Array;
+    this.dbData=[];
 
     console.log(e);
-    var d1 = new Date(e.d1);
-    var d2 = new Date(e.d2);
-    console.log(typeof (d1));
-    this.date1 = d1.toISOString();
-    this.date2 = d2.toISOString();
-
-    console.log(this.date1);
-    console.log(this.date2)
-
-    var m1 = d1.getMonth();
-    console.log(m1);
-    var m2 = d1.getMonth();
-    console.log(m2);
+    var d11 = new Date(e.d1);
+    var d22 = new Date(e.d2);
+   
+    this.date1 = d11.toISOString();
+    this.date2 = d22.toISOString();
 
     for (let n = 0; n < 30; n++) {
       this.myarray[n] = new Array(4);
@@ -106,31 +95,83 @@ export class GraphComponent implements OnInit {
           "d2": this.date2,
           "dId": this.selectedAreaItems[a]
         }
-      
 
       this.http.post("http://localhost:3000/display/graph", this.monthDate).subscribe(res => {
 
         console.log(res);
+        this.totalLength++;
         var temp = res.json();
         console.log(temp);
-        var t;
-
-        for (t = 0; t < temp.length; t++) {
-          this.date[t] = temp[t].timestamp;
-
-          for (let l = 0; l < temp.length; l++) {
-            this.myarray[a][l] = temp[l].usage;
+        var j=0,t
+        
+        this.dbData[this.dbFetch++]=temp;
+              
+        if(this.date.length){
+          var len=this.date.length+temp.length;
+          for(let i=this.date.length;i<len;i++){
+            this.date[i]=temp[j].timestamp;
+            j++;
           }
         }
-        console.log(this.date)
-        console.log(this.myarray[a]);
-        this.chartData2.push({ data: this.myarray[a], label: this.selectedAreaItems[a] });
-        this.status++;
+        else{
+          for (t = 0; t < temp.length; t++) {
+            this.date[t] = temp[t].timestamp;
+          }
+
+        }
+
+        console.log(this.date);
+
+        this.date.sort();
+
+        console.log(this.date);
+        console.log(this.totalLength);
         console.log(this.selectedAreaItems.length);
-        console.log(this.status);
+        if(this.totalLength==this.selectedAreaItems.length){
+
+          console.log(this.dbData[0][0]);
+          console.log(this.dbData);
+          
+            for(let b=0;b<this.dbData.length;b++){
+              for(let k=0;k<this.dbData[b].length;k++){
+                for(let i=0;i<this.date.length;i++)
+                {
+                  if(this.date[i]==this.dbData[b][k].timestamp)
+                  {
+                    this.myarray[b][i] = this.dbData[b][k].usage;
+                  }
+                }
+            }
+            console.log(this.myarray[b]);
+            this.chartData2.push({ data: this.myarray[b], label: this.selectedAreaItems[b] });
+            this.status++;
+            
+            console.log(this.selectedAreaItems.length);
+            console.log(this.status);
+          }
+          console.log(this.dbData);
+          console.log(this.myarray);
+        }
+        
+
+    //     for (t = 0; t < temp.length; t++) {
+    //       this.date[t] = temp[t].timestamp;
+
+    //       for (let l = 0; l < temp.length; l++) {
+    //         this.myarray[a][l] = temp[l].usage;
+    //       }
+    //     }
+    //     console.log(this.date)
+    //     console.log(this.myarray[a]);
+    //     this.chartData2.push({ data: this.myarray[a], label: this.selectedAreaItems[a] });
+    //     this.status++;
+    //     console.log(this.selectedAreaItems.length);
+    //     console.log(this.status);
+    //   })
+    // }
+    // console.log(this.myarray);
       })
     }
-    console.log(this.myarray);
   }
 
 

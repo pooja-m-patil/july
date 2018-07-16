@@ -50,11 +50,11 @@ export class NavbarComponent implements OnInit{
   {
     console.log(value);
     if(value=='fetchdata'){
-      this.router.navigate(['/load/fetchdata']);
+      this.router.navigate(['fetchdata']);
     }
     else if(value=='devicediscovery')
     {
-      this.router.navigate(['/load/devicediscovery']);
+      this.router.navigate(['devicediscovery']);
     }
   }
 
@@ -66,7 +66,7 @@ export class NavbarComponent implements OnInit{
     }
     else if(val=='home')
     {
-      this.router.navigate(['/load/dashboard']);
+      this.router.navigate(['dashboard']);
     }
   }
 

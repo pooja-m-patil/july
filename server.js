@@ -119,11 +119,7 @@ app.post("/remoteApp", function (req, res) {
     var uid = req.body.deviceId;
     dev.devices(uid, function (data) {
       if (data.bookmark != 'nil') {
-        // if (data.bookmark == undefined) 
-        // {
-        //   res.send("");
-        //   return;
-        // }
+        
         dev.authAvailable(uid, function (data) {
           console.log(data);
           if (data.bookmark != 'nil') {
@@ -142,23 +138,25 @@ app.post("/remoteApp", function (req, res) {
   }
 })
 
+
+var appClientConfig = {
+  "org": 'tgacg8',
+  "id": 'myapp',
+  "auth-key": 'a-tgacg8-p3heyf1c1g',
+  "auth-token": 'oFmcgTeiCBw@Q4*vj('
+};
+
+var appClient = new Client.IotfApplication(appClientConfig);
+
+
+appClient.connect();
+
+
 app.post("/real-time-data", function (req, res) {
 
 
   var loc = req.body.location;
   console.log(loc);
-
-  var appClientConfig = {
-    "org": 'tgacg8',
-    "id": 'myapp',
-    "auth-key": 'a-tgacg8-p3heyf1c1g',
-    "auth-token": 'oFmcgTeiCBw@Q4*vj('
-  };
-
-  var appClient = new Client.IotfApplication(appClientConfig);
-
-
-  appClient.connect();
 
   appClient.on("connect", function () {
 
@@ -177,109 +175,91 @@ app.post("/real-time-data", function (req, res) {
 })
 
 
-var appClientConfig = {
-  "org": 'tgacg8',
-  "id": 'myapp',
-  "auth-key": 'a-tgacg8-p3heyf1c1g',
-  "auth-token": 'oFmcgTeiCBw@Q4*vj('
-};
-
-var appClient = new Client.IotfApplication(appClientConfig);
-
-
-appClient.connect();
-
-
 
 appClient.on("connect", function () {
-
-  rejectDevices=[];
-  //console.log(rejectDevices);
   appClient.subscribeToDeviceEvents("+", '+', "status");
-
 });
 
 appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, payload) {
 
-  //console.log("Device Event from :: " + deviceType + " : " + deviceId + " of event " + eventType + " with payload : " + payload);
   var temp = JSON.parse(payload);
-  console.log(temp);
-  //console.log(temp.d.deviceId)
   var devId = temp.d.deviceId;
 
-  devData.getDeviceData(devId, function (data) {
+   devData.insertDataIntoDatabase(temp.d,function(data){
+   });
+  
+
+  devData.getDeviceData(devId, function (data2) {
 
     deviceIdPresent=false;
     totalUsage = 0;
-    //console.log(data);
-
-    for (let i = 0; i < data.docs.length; i++) {
-      totalUsage = totalUsage + data.docs[i].data.d.usage;
+  
+    for (let i = 0; i < data2.docs.length; i++) {
+      totalUsage = totalUsage + data2.docs[0].usage;
     }
-    // console.log(data.docs[0].data);
-    // console.log(data.docs[1].data);
 
       devData.getUserName(devId, function(data){
         var uname=data.docs[0].username;
      
-
-
-
-    console.log(totalUsage);
     if (allDevUsage.length) {
       for (let i = 0; i < allDevUsage.length; i++) {
         if (allDevUsage[i].deviceId == devId) {
           allDevUsage[i].usage = totalUsage;
-          //console.log(allDevUsage);
           deviceIdPresent=true;
         }
       }
       if(deviceIdPresent==false){
-        console.log("add device");
-        allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage });
-        console.log(allDevUsage);
+        allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage, "status":"Running" });
       }
     }
     else {
-      allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage });
-      console.log(allDevUsage);
-      //socket1.emit("total device usage", allDevUsage);
-
+      allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage, "status":"Running" });
     }
 
-    for(let i=0;i<allDevUsage.length;i++){
-      console.log("for loop");
-      console.log(rejectDevices);
-      console.log(allDevUsage)
-      if(rejectDevices.includes(allDevUsage[i].deviceId)){
-        appClient.publishDeviceCommand("iotbootcamp", allDevUsage[i].deviceId, "reboot", "json", { "status": "close" });
-        allDevUsage.splice(i,1);
-        socket1.emit("total device usage", allDevUsage);
-        console.log("dev");
-        console.log(allDevUsage);
-      }
-    }
+    // for(let i=0;i<allDevUsage.length;i++){
+    //   if(rejectDevices.includes(allDevUsage[i].deviceId)){
+    //     appClient.publishDeviceCommand("iotbootcamp", allDevUsage[i].deviceId, "reboot", "json", { "status": "close" });
+    //     allDevUsage[i].status="Stopped";
+    //     //socket1.emit("total device usage", allDevUsage);
+    //   }
+    // }
     socket1.emit("total device usage", allDevUsage);
-    //console.log(allDevUsage);
    
     app.post("/stop-conn", function (req, res) {
 
       var dId1=req.body.devId;
-      appClient.publishDeviceCommand("iotbootcamp", dId1, "reboot", "json", { "status": "close" });
-      //appClient.disconnect();
+      appClient.publishDeviceCommand("iotbootcamp", dId1, "reboot", "json", { "status": "Close" });
 
-      if(!rejectDevices.includes(dId1)){
-        rejectDevices.push(dId1);
+      for(let i=0;i<allDevUsage.length;i++){
+        if(allDevUsage[i].deviceId==dId1){
+          allDevUsage[i].status="Stopped";
+          socket1.emit("total device usage", allDevUsage);
+        }
       }
-      //console.log("reject")
-      //console.log(rejectDevices)
 
       res.send("Device connection stopped successfully");
+    });
+
+
+    app.post("/restart-conn", function (req, res) {
+      
+      if(req.body.devId){
+        var did=req.body.devId;
+        console.log(did);
+        appClient.publishDeviceCommand("iotbootcamp", did, "reboot", "json", { "status": "Restart" });
+
+        for(let i=0;i<allDevUsage.length;i++){
+          if(allDevUsage[i].deviceId==did){
+            allDevUsage[i].status="Running";
+            socket1.emit("total device usage", allDevUsage);
+            res.send("Device connection restarted successfully");
+          }
+        }
+      }
+      
     })
-    
   })
-  //socket1.emit("device data",{"usage":temp.d.usage,"time":temp.d.time});
-});
+}) 
 });
 
 
@@ -287,13 +267,6 @@ app.get("/initarray", function (req, res) {
   res.send(devicesObj.emit());
 })
 
-// app.post("/connectDevice", function (request, response) {
-//   var id=request.body.deviceId;
-//   console.log("deviceId"+id);
-//   // if(id==dId){
-//     response.send({"deviceId":id});
-//   // }
-// })
 
 
 module.exports = app;

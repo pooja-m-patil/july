@@ -12,7 +12,7 @@ declare var io : {
 @Injectable()
 export class DataService {
 
-  socket: Socket=socketIo('http://localhost:3000');
+  socket=socketIo('http://localhost:3000');
   observer: Observer<any>;
 
   // getQuotes() : Observable<any> 
