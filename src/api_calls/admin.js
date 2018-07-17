@@ -129,7 +129,7 @@ console.log(uname+" "+locname+" "+newDId);
         }
     };
 
-    req(options, function (error, response, body) {
+    req(options, function (error, res, body) {
       if (error) throw new Error(error);
 
       console.log(body);
@@ -137,6 +137,7 @@ console.log(uname+" "+locname+" "+newDId);
       confirm.confirmUserReq(newDId, data1, uname, locname, lat, lng, function (data){
         console.log(data);
         console.log("data");
+        response.send(data);
       });
     });
 

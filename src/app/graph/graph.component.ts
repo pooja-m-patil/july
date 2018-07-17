@@ -37,6 +37,7 @@ export class GraphComponent implements OnInit {
   dropdownAreaSettings = {};
   myarray: number[][] = new Array;
   dbData=[];
+  graphLabel=[];
 
   constructor(private http: Http) {
 
@@ -84,11 +85,16 @@ export class GraphComponent implements OnInit {
     this.date1 = d11.toISOString();
     this.date2 = d22.toISOString();
 
-    for (let n = 0; n < 30; n++) {
+    console.log(this.selectedAreaItems);
+
+    for (let n = 0; n < this.selectedAreaItems.length; n++) {
       this.myarray[n] = new Array(4);
     }
 
     for (let a = 0; a < this.selectedAreaItems.length; a++) {
+
+      console.log(this.selectedAreaItems[a]);
+      console.log(a);
       
         this.monthDate = {
           "d1": this.date1,
@@ -102,7 +108,8 @@ export class GraphComponent implements OnInit {
         this.totalLength++;
         var temp = res.json();
         console.log(temp);
-        var j=0,t
+        var j=0,t;
+
         
         this.dbData[this.dbFetch++]=temp;
               
@@ -120,7 +127,7 @@ export class GraphComponent implements OnInit {
 
         }
 
-        console.log(this.date);
+        
 
         this.date.sort();
 
@@ -131,8 +138,11 @@ export class GraphComponent implements OnInit {
 
           console.log(this.dbData[0][0]);
           console.log(this.dbData);
+          console.log(this.date);
           
             for(let b=0;b<this.dbData.length;b++){
+
+              this.graphLabel[b]=this.dbData[b][0].deviceId;
               for(let k=0;k<this.dbData[b].length;k++){
                 for(let i=0;i<this.date.length;i++)
                 {
@@ -143,7 +153,7 @@ export class GraphComponent implements OnInit {
                 }
             }
             console.log(this.myarray[b]);
-            this.chartData2.push({ data: this.myarray[b], label: this.selectedAreaItems[b] });
+            this.chartData2.push({ data: this.myarray[b], label: this.graphLabel[b] });
             this.status++;
             
             console.log(this.selectedAreaItems.length);
@@ -152,7 +162,10 @@ export class GraphComponent implements OnInit {
           console.log(this.dbData);
           console.log(this.myarray);
         }
-        
+      })
+     
+    }
+  }    
 
     //     for (t = 0; t < temp.length; t++) {
     //       this.date[t] = temp[t].timestamp;
@@ -170,9 +183,7 @@ export class GraphComponent implements OnInit {
     //   })
     // }
     // console.log(this.myarray);
-      })
-    }
-  }
+      
 
 
   ngOnInit() {

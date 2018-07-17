@@ -199,6 +199,8 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
     }
 
       devData.getUserName(devId, function(data){
+        console.log(data);
+        if(data.bookmark!='nil'){
         var uname=data.docs[0].username;
      
     if (allDevUsage.length) {
@@ -258,6 +260,7 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
       }
       
     })
+  }
   })
 }) 
 });
