@@ -151,9 +151,11 @@ app.post("/remoteApp", function (req, res) {
           if (data.bookmark != 'nil') {
             res.send({ Authentication_Token: data.docs[0].data.authToken })
           }
+          else{
+          console.log("auth");
+          devicesObj.add(uid);
+          }
         })
-
-        devicesObj.add(uid);
 
       }
       else {
@@ -249,7 +251,7 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
     app.post("/stop-conn", function (req, res) {
 
       var dId1=req.body.devId;
-      appClient.publishDeviceCommand("iotbootcamp", dId1, "reboot", "json", { "status": "Close" });
+      appClient.publishDeviceCommand("iotbootcamp", dId1, "reboot", "json", { "status": "Stop" });
 
       for(let i=0;i<allDevUsage.length;i++){
         if(allDevUsage[i].deviceId==dId1){

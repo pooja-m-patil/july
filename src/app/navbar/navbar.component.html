@@ -14,29 +14,23 @@
             </li>
 
             <li>
-              <a routerLink="/features">Features</a>
-            </li>
-
-            <li>
               <div>
                 <select class="my-select col s12" #select (change)="Navigate(select.value)" id="select" style="width: 2.5cm">
-                  <option value="" disabled selected>Devices</option>
+                  <option value='dashboard' disabled selected>Devices</option>
                   <option value='fetchdata'>Device List</option>
-                  <option value='devicediscovery'>Discover Devices</option>
+                  <option value='devicediscovery'>Device Discovery</option>
                 </select>
               </div>
             </li>
 
             <li>
-              <a routerLink="/admin-connections">Connections</a>
-            </li>
-
-            <li>
-              <a routerLink="/requested_conn">Connection Requests</a>
-            </li>
-
-            <li>
-              <a routerLink="/add-device">Add New Device</a>
+              <div>
+                <select #connId (change)="Navigate(connId.value)" style="width: 3.5cm">
+                  <option value='dashboard' disabled selected>Connections</option>
+                  <option value='device-usage'>Connected Devices</option>
+                  <option value='requested_conn'>Connection Requests</option>
+                </select>
+              </div>
             </li>
 
             <li>
@@ -44,7 +38,7 @@
             </li>
 
             <li>
-              <a routerLink="/device-usage">Device Usage</a>
+              <a routerLink="/admin-connections">Usage</a>
             </li>
 
 
@@ -128,15 +122,17 @@
 
 <div id="chatdiv" *ngIf="user.getLog()">
   <div class="chatbox" *ngIf="showDiv">
+    <div>
     <table class="table table-hover">
           <tr class="table-active" *ngFor="let msg of messages; let i=index;" [class.right]="msg.self">
           <td>{{msg.text}}</td>
           </tr>
     </table>
-    <form (submit)="watson($event)" style="bottom: 5%; position:fixed;">
-        <input type="textbox" placeholder="Enter your message" name="txt" [(ngModel)]="userData" style="width:75%;">
+  </div>
+    <form (submit)="watson($event)" style="bottom: 8%; position:fixed;">
+        <input type="textbox" placeholder="Enter your message" name="txt" [(ngModel)]="userData" style="width:70%;">
         <input class="btn" type="submit" value="Send">
     </form>
   </div>
-  <button class="chatButton" style="right:1%; bottom: 1%; position:fixed;"  (click)="toggleDiv()">Chatbox</button>
+  <div style="right:1%; bottom: 1%; position:fixed;"><img src="/assets/images/chat1.png" (click)="toggleDiv()" height="50" width="50"></div>
 </div>

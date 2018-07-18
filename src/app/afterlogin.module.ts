@@ -16,7 +16,6 @@ import { RetrivedataComponent } from './retrivedata/retrivedata.component';
 import { AddDeviceComponent } from './add-device/add-device.component';
 import { ChartsModule } from 'ng2-charts';
 import { GraphComponent } from './graph/graph.component';
-import { FeaturesComponent } from './features/features.component';
 import { FetchdataComponent } from './fetchdata/fetchdata.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { DeviceDiscoveryComponent } from './device-discovery/device-discovery.component';
@@ -56,11 +55,6 @@ const routes: Routes = [
     path:'graph',
     canActivate:[AuthguardGuard],
     component:GraphComponent
-  },
-  {
-    path:'features',
-    canActivate:[AuthguardGuard],
-    component:FeaturesComponent
   },
     {
       path:'retrivedata',
@@ -126,7 +120,6 @@ const routes: Routes = [
     RetrivedataComponent,
     AddDeviceComponent,
     GraphComponent,
-    FeaturesComponent,
     FetchdataComponent,
     DeviceDiscoveryComponent,
     DevicetypeComponent,

@@ -49,13 +49,7 @@ export class NavbarComponent implements OnInit{
   Navigate(value)
   {
     console.log(value);
-    if(value=='fetchdata'){
-      this.router.navigate(['fetchdata']);
-    }
-    else if(value=='devicediscovery')
-    {
-      this.router.navigate(['devicediscovery']);
-    }
+    this.router.navigate([value]);
   }
 
   adminSelect(val){

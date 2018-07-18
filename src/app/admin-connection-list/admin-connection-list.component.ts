@@ -37,11 +37,11 @@ export class AdminConnectionListComponent implements OnInit {
         this.longitude = parseFloat(this.connList[i].longitude);
       }
     }
-    if(this.user.getLog()=='admin')
+    if(this.user.getLog()=='admin@gslab.com')
     {
       this.showMapToAdmin = true;
     }
-    else if(this.user.getLog()!='admin')
+    else if(this.user.getLog()!='admin@gslab.com')
     {
       this.showMapToUser = true;
     }
@@ -106,6 +106,7 @@ export class AdminConnectionListComponent implements OnInit {
         console.log(res.ok);
         if(res.ok==true){
           console.log("delete reg devices");
+          this.ngOnInit();
           this.msg="Device Successfully Registered";
 
         }

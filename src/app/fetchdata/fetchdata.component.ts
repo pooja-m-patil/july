@@ -48,7 +48,7 @@ showAuth=function(device)
           "name": id
         }
       
-        this.http.post('http://localhost:3000/api/datafetch', this.devObj)
+        this.http.post('http://localhost:3000/display/datafetch', this.devObj)
         .subscribe((res:Response) =>{
           this.model.Token=id;
           device.authToken =  res['_body'];
