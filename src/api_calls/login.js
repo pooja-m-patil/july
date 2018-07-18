@@ -4,7 +4,8 @@ var login;
 var bcrypt=require('bcrypt-nodejs');
 var salt = bcrypt.genSaltSync(10);
 var LocalStrategy=require('passport-local').Strategy;
-const passport = require('passport')
+const passport = require('passport');
+const jwt=require('jsonwebtoken');
 
 // load local VCAP configuration  and service credentials
 var vcapLocal;
@@ -81,7 +82,7 @@ exports.getLoginInfo=function(uname,pass,callback)
 
     console.log(body);
     if(body.bookmark=='nil'){
-      callback(false);
+      callback({token:false});
     }
     else{
   
@@ -89,8 +90,22 @@ exports.getLoginInfo=function(uname,pass,callback)
     //console.log(hash);
     var pwd=body.docs[0].Password;
   
+    const user={
+      username:body.docs[0]._id,
+      password:body.docs[0].Password
+    }
+
+    
     let status=bcrypt.compareSync(pass,pwd);
-    callback(status);
+    if(status){
+      console.log("true");
+      jwt.sign({user},'secretkey',(err,token)=>{
+        callback({username:body.docs[0]._id,token});
+      })
+    }
+    else{
+      callback({token:false});
+    }
     }
   });
 }

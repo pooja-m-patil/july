@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Model } from '../model';
 import { Http, Response, Headers } from '@angular/http';
 import {RequestOptions, Request, RequestMethod} from '@angular/http';
+import { HttpHeaders } from '@angular/common/http';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-fetchdata',
@@ -10,7 +12,7 @@ import {RequestOptions, Request, RequestMethod} from '@angular/http';
 })
 export class FetchdataComponent implements OnInit {
   public model=new Model();
-  constructor(private http: Http) { }
+  constructor(private http: Http,private user:UserService) { }
   
   deleteDevice = function(id) {
     console.log(id);
@@ -46,7 +48,7 @@ showAuth=function(device)
           "name": id
         }
       
-        this.http.post('http://localhost:3000/display/datafetch', this.devObj)
+        this.http.post('http://localhost:3000/api/datafetch', this.devObj)
         .subscribe((res:Response) =>{
           this.model.Token=id;
           device.authToken =  res['_body'];
@@ -60,13 +62,21 @@ showAuth=function(device)
     }
 
   ngOnInit() {
+
+    let headers = new Headers({
+      'authorization': 'Bearer '+this.user.getToken()
+    });
+
+    let options = new RequestOptions({
+      headers: headers,
+    });
+  
     console.log("uname "+this.model.uname);
-    this.http.get("http://localhost:3000/display").subscribe(res=>{
+    this.http.get("http://localhost:3000/display",options).subscribe(res=>{
         this.model.isFetch=true;
         this.model.devices=res.json();
         console.log(this.model.devices);
         //return this.devices;
       });
   }
-
 }

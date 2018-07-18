@@ -5,8 +5,10 @@ var bodyParser = require('body-parser');
 var request = require("request");
 var express1 = require('express-validation');
 var router = express.Router();
+var cors = require('cors');
 
 var route = require('./src/api_calls/route');
+var login=require('./src/api_calls/login-user');
 var user = require('./src/api_calls/user');
 var admin = require('./src/api_calls/admin');
 var socketIo = require('socket.io');
@@ -29,21 +31,45 @@ var server = app.listen(3000, function () {
   console.log("Listening on port:3000");
 });
 
+app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
+
+
+app.use('/display',route);
+
+function verifyToken(req,res,next){
+  //console.log("verify token");
+  //console.log(req);
+  //console.log(req.headers['authorization']);
+  const tokenHeader=req.headers['authorization'];
+  console.log(tokenHeader)
+  if(tokenHeader!=undefined){
+    next();
+    //res.json({'token':'valid'})
+    
+  }else{
+    console.log("undefined");
+    //res.json({'token':'invalid'})
+  }
+}
+
+
 app.use('/display', route);
-app.use('/display', user);
-app.use('/display', admin);
-app.use('/display', watson);
+app.use('/display',  user);
+app.use('/display',  admin);
+app.use('/display',  watson);
+
+
 
 devicesObj = {
   devArray: [],
@@ -218,13 +244,6 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
       allDevUsage.push({ "uname":uname, "deviceId": devId, "usage": totalUsage, "status":"Running" });
     }
 
-    // for(let i=0;i<allDevUsage.length;i++){
-    //   if(rejectDevices.includes(allDevUsage[i].deviceId)){
-    //     appClient.publishDeviceCommand("iotbootcamp", allDevUsage[i].deviceId, "reboot", "json", { "status": "close" });
-    //     allDevUsage[i].status="Stopped";
-    //     //socket1.emit("total device usage", allDevUsage);
-    //   }
-    // }
     socket1.emit("total device usage", allDevUsage);
    
     app.post("/stop-conn", function (req, res) {
@@ -258,18 +277,14 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
           }
         }
       }
-      
     })
   }
   })
 }) 
 });
 
-
 app.get("/initarray", function (req, res) {
   res.send(devicesObj.emit());
 })
-
-
 
 module.exports = app;

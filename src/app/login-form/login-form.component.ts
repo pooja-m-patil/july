@@ -32,20 +32,19 @@ export class LoginFormComponent implements OnInit {
       "password":this.model.pwd
     }
 
-    
-    if(this.model.uname=="admin"){
-      this.user.setLog(this.model.uname);
-      this.router.navigate(['dashboard']);
-    }
-    
-
     this.http.post('http://localhost:3000/display/login', this.loginObj)
         .subscribe((res:Response) =>{
           console.log(res);
-          var temp=res['_body'];
-          if(temp=='true'){
-            console.log(temp);
-            console.log(this.model.uname);
+          var temp=res.json();
+          console.log(temp.token);
+          console.log(temp.username);
+          this.user.setToken(temp.token);
+          if(temp.username=="admin@gslab.com"){
+            this.user.setLog(this.model.uname);
+            this.router.navigate(['dashboard']);
+          }
+          else if(temp.token){
+            console.log("user");
             this.user.setLog(this.model.uname);
             this.router.navigate(['dashboard']);
           }
@@ -53,8 +52,7 @@ export class LoginFormComponent implements OnInit {
             console.log("Username or Password incorrect. Please try again");
             this.model.errmsg="Username or Password incorrect. Please try again"
           }
-        var temp=res['_body'];
-          
+          var temp=res['_body']; 
         
           console.log("id"+temp);
           

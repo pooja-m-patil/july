@@ -39,18 +39,35 @@ export class UserService {
 
   setLog(uname) {
     //this.isUserLoggedIn=true;
-    localStorage.setItem(this.key, uname);
+    localStorage.setItem('uname', uname);
   }
 
   getLog() {
     //return this.isUserLoggedIn;
-    return localStorage.getItem(this.key);
+    return localStorage.getItem('uname');
   }
 
   logout() {
     //return this.isUserLoggedIn;
     console.log("logout");
-    return localStorage.removeItem(this.key);
+    return localStorage.removeItem('uname');
+
+  } 
+
+  setToken(token) {
+    //this.isUserLoggedIn=true;
+    localStorage.setItem('token',token);
+  }
+
+  getToken() {
+    //return this.isUserLoggedIn;
+    return localStorage.getItem('token');
+  }
+
+  removeToken() {
+    //return this.isUserLoggedIn;
+    console.log("logout");
+    return localStorage.removeItem('token');
 
   } 
 

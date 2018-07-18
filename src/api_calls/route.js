@@ -13,6 +13,7 @@ var map = require('./map.js');
 var city = require('../city.js');
 var reg = require('./register.js');
 var type = require('./devicetypes');
+const jwt=require('jsonwebtoken')
 
 
 var vcapLocal;
@@ -73,15 +74,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   next();
 // });
 
-app.post("/login", function (request, response) {
-  //console.log(request.body.username);
-  var uname = request.body.username;
-  var pass = request.body.password;
-  server2.getLoginInfo(uname, pass, function (data) {
-    console.log(data);
-    response.send(data);
-  });
-});
+
+
 
 app.post("/register", function (request, response) {
   //console.log(request.body.username);
@@ -93,6 +87,7 @@ app.post("/register", function (request, response) {
     response.send(data);
   });
 });
+
 
 app.post("/datafetch", function (request, response) {
   console.log(request.body.name);
@@ -156,8 +151,23 @@ app.post("/adddev", function (request, response) {
   //}
 });
 
+app.post("/login", function (request, response) {
+  console.log("hello");
+
+  var uname = request.body.username;
+  var pasw = request.body.password;
+
+  server2.getLoginInfo(uname, pasw, function (data) { 
+  console.log("login");
+  console.log(data);
+  response.send(data);
+});
+
+});
+
 
 app.get("/", function (request, response) {
+  console.log("fetch data");
   server.getDevices(function (data) {
     console.log(data);
     response.send(data);
@@ -219,6 +229,23 @@ app.get("/dtype", function (request, response) {
     response.send(data);
   });
 });
+
+
+// function verifyToken(req,res,next){
+//   console.log("verify token");
+//   console.log(req);
+//   console.log(req.headers['authorization']);
+//   const tokenHeader=req.headers['authorization'];
+//   console.log(tokenHeader)
+//   if(tokenHeader!=undefined){
+//     res.json({'token':'valid'})
+//     //res.next({'token':'valid'})
+//   }else{
+//     console.log("undefined");
+//     res.json({'token':'invalid'})
+//     //next({'token':'invalid'})
+//   }
+// }
 
 
 module.exports = app;
