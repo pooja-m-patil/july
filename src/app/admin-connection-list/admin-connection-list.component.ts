@@ -25,6 +25,7 @@ export class AdminConnectionListComponent implements OnInit {
   userData=[];
   deviceObj:object;
   showDataGraph:boolean=false;
+  showDevices:boolean=false;
 
   constructor(private http: Http, private dataService: DataService,private user:UserService) { }
 
@@ -55,6 +56,36 @@ export class AdminConnectionListComponent implements OnInit {
       "longitude":lng,
       "deviceId":dId
     }
+
+    this.showDevices=true;
+    this.http.get("http://localhost:3000/display/getIOTDevices").subscribe((res:Response) => 
+      {
+        console.log(res);
+        var temp=res.json();
+        console.log(temp);
+        console.log(temp.docs[0]._id);
+        // this.iotDevices
+        for(let i=0;i<temp.docs.length;i++){
+          this.iotDevices[i]=temp.docs[i]._id;
+        }
+        console.log(this.iotDevices);
+        this.http.get("http://localhost:3000/display/getConfirmedDevices").subscribe((res:Response) => 
+        {
+          console.log(res);
+          var temp=res.json();
+          console.log(temp.docs);
+          for(let i=0;i<temp.docs.length;i++){
+              this.userRegDevices[i]=temp.docs[i]._id;
+            }
+          console.log(this.userRegDevices);
+          for(let i=0,j=0;i<this.iotDevices.length;i++){
+            if(!this.userRegDevices.includes(this.iotDevices[i])){
+              this.displayDevices[j++]=this.iotDevices[i];
+            }
+          }
+          console.log(this.displayDevices);
+        })
+      })
   }
 
   myFunction=function(val){
@@ -69,6 +100,7 @@ export class AdminConnectionListComponent implements OnInit {
 
     this.showMapToAdmin=false;
     this.showMapToUser=false;
+    this.showDevices=false;
     this.showDataGraph=true;
 
     this.locObj={
@@ -131,34 +163,5 @@ export class AdminConnectionListComponent implements OnInit {
     // this.longitude=parseFloat(this.userData[3].longitude);
     // console.log(this.latitude);
     // console.log(this.longitude);
-    
-    this.http.get("http://localhost:3000/display/getIOTDevices").subscribe((res:Response) => 
-      {
-        console.log(res);
-        var temp=res.json();
-        console.log(temp);
-        console.log(temp.docs[0]._id);
-        // this.iotDevices
-        for(let i=0;i<temp.docs.length;i++){
-          this.iotDevices[i]=temp.docs[i]._id;
-        }
-        console.log(this.iotDevices);
-        this.http.get("http://localhost:3000/display/getConfirmedDevices").subscribe((res:Response) => 
-        {
-          console.log(res);
-          var temp=res.json();
-          console.log(temp.docs);
-          for(let i=0;i<temp.docs.length;i++){
-              this.userRegDevices[i]=temp.docs[i]._id;
-            }
-          console.log(this.userRegDevices);
-          for(let i=0,j=0;i<this.iotDevices.length;i++){
-            if(!this.userRegDevices.includes(this.iotDevices[i])){
-              this.displayDevices[j++]=this.iotDevices[i];
-            }
-          }
-          console.log(this.displayDevices);
-        })
-      })
   }
   }

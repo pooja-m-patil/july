@@ -1,7 +1,10 @@
 <h3 style="text-align:center;"><b>Connected Devices</b></h3>
 
 <h3 style="text-align:center; color:green"><b>{{connMsg}}</b></h3>
-<div>
+
+<div *ngIf="deviceUsage.length==0" style="width: 160px; height: 30px; position: absolute; margin: auto; top:0; bottom:0; left:0; right:0">No devices connected</div>
+
+<div *ngIf="deviceUsage.length!=0">
   <table class="table table-hover">
       <thead>
         <tr>

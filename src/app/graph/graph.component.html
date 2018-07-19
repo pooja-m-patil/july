@@ -1,4 +1,4 @@
-
+<h3 style="text-align:center;"><b>Graph</b></h3>
     <div class="container">
     
       <ng-multiselect-dropdown
@@ -15,7 +15,7 @@
   
   
   <ng-multiselect-dropdown *ngIf="dropdownAreaList.length"
-      (placeholder)="'Select Areas (atmost 2)'"
+      [placeholder]="'Select Devices'"
       [data]="dropdownAreaList"
       [(ngModel)]="selectedAreaItems"
       [settings]="dropdownSettings"

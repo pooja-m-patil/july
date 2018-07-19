@@ -100,5 +100,4 @@ export class MappingDevicesComponent implements OnInit {
         })
       })
   }
-
 }

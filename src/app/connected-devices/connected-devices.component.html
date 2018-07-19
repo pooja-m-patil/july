@@ -21,11 +21,9 @@
         </tr>
       </tbody>
     </table>
-
 </div>
 
-<div *ngIf="chartData.length">
-  <h3>Line Chart</h3>
+<div *ngIf="chartData.length && showDataGraph" style="width:90%; margin-left:auto; margin-right:auto;">
   <div style="width: 50%;">
     <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'"
       (chartClick)="onChartClick($event)">
@@ -33,7 +31,7 @@
   </div>
 </div>
 
-<div *ngIf="showMap">
+<div *ngIf="showMapToUser">
 <agm-map [latitude]="latitude" [longitude]="longitude">
   <agm-marker [latitude]="latitude" [longitude]="longitude">
   </agm-marker>

@@ -84,8 +84,8 @@ export class DeviceDiscoveryComponent implements OnInit {
   .subscribe(quote => {
     console.log(quote);
     this.flag=0;
-    this.showdiv=true;
    this.remoteDevices=quote.slice(0);
+   this.showdiv=true;
   })
     console.log(this.remoteDevices);
   }

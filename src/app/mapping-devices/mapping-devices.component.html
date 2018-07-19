@@ -1,4 +1,5 @@
-<h2 style="text-align:center; color:green">{{msg}}</h2>
+<h3 style="text-align:center;"><b>Create Connection</b></h3>
+<h3 style="text-align:center; color:green">{{msg}}</h3>
 <div>
 <div class="col-sm-3" style="top: 0.6cm">
     <table class="table table-hover" align="left" border=1>
@@ -11,8 +12,8 @@
   &nbsp;
   
   
-  <agm-map id="map1" [latitude]="latitude" [longitude]="longitude" id="cname" name="locationcoords">
-        <agm-marker [latitude]="latitude" [longitude]="longitude">
+  <agm-map id="map" [latitude]="latitude" [longitude]="longitude" id="cname" name="locationcoords">
+        <agm-marker [latitude]="latitude" [longitude]="longitude" class='agm-map-container-inner sebm-google-map-container-inner'>
           <agm-info-window>
             <input #textInput (input)="myFunction(textInput.value)" value={{value}} placeholder="Drag and drop Device Id">
             <input type="submit" value="Confirm" (click)="connectDevice(textInput.value)">

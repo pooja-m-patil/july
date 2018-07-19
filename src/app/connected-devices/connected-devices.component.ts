@@ -26,6 +26,7 @@ export class ConnectedDevicesComponent implements OnInit {
 
 
   showGraph=function(loc){
+    this.showDataGraph=false;
     console.log(loc);
     for(let i=0;i<this.deviceData.length;i++){
       if(loc==this.deviceData[i].locationname){
@@ -33,11 +34,15 @@ export class ConnectedDevicesComponent implements OnInit {
         this.longitude=parseFloat(this.deviceData[i].longitude);
       }
     }
-    this.showMap=true;
+    this.showMapToUser=true;
     console.log(this.latitude+" "+this.longitude);
   }
 
   getData = function (dId) {
+
+    this.showMapToUser=false;
+    this.showDataGraph=true;
+
     console.log(dId);
 
     this.locObj={

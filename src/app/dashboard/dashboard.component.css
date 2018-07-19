@@ -108,3 +108,35 @@ a:hover {
 .productpic .captioncolumn { width: 80%; /*height: 50px;*/ position: absolute; top: 20px; left: 0; opacity: 1; padding: 5px 0 5px 20px;}
 .productpic .captioncolumn span { font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 36px; position: relative; color: #2a286a; opacity: 1; }
 .productpic .captioncolumn:hover { opacity: 0.5;}
+
+/* * {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.header {
+    text-align: center;
+    padding: 32px;
+}
+
+/* Create two equal columns that floats next to each other */
+/* .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.column img {
+    margin-top: 12px;
+}
+
+/* Clear floats after the columns */
+/* .row:after {
+    content: "";
+    display: table;
+    clear: both;
+} */ 

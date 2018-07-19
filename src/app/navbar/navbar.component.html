@@ -15,13 +15,21 @@
 
             <li>
               <div>
-                <select class="my-select col s12" #select (change)="Navigate(select.value)" id="select" style="width: 2.5cm">
+                <select class="my-select col s12" #select (change)="Navigate(select.value)" id="select" style="width: 2.5cm" name="Dropdown">
                   <option value='dashboard' disabled selected>Devices</option>
-                  <option value='fetchdata'>Device List</option>
+                  <option value='fetchdata' onchange="fetchdata">Device List</option>
                   <option value='devicediscovery'>Device Discovery</option>
                 </select>
               </div>
             </li>
+
+            <!-- <label for="conn">Connections available</label>
+            <select name="conn" id="conn">
+                <option value='dashboard'>Connections disabled</option>
+                <option value='device-usage'>Connected Devices</option>
+                <option value='requested_conn'>Connection Requests</option>
+                <option value='admin-connections'>Connection List</option>
+            </select> -->
 
             <li>
               <div>
@@ -29,18 +37,18 @@
                   <option value='dashboard' disabled selected>Connections</option>
                   <option value='device-usage'>Connected Devices</option>
                   <option value='requested_conn'>Connection Requests</option>
+                  <option value='admin-connections'>Connection List</option>
                 </select>
               </div>
             </li>
 
             <li>
-              <a routerLink="/graph">Show Graph</a>
+              <a routerLink="/graph">Graph</a>
             </li>
 
-            <li>
+            <!-- <li>
               <a routerLink="/admin-connections">Usage</a>
-            </li>
-
+            </li> -->
 
             <table border=1 *ngIf="user.returnCount()==true">
               <tr>
@@ -49,7 +57,6 @@
                 </td>
               </tr>
             </table>
-
           </ul>
         </div>
 
@@ -74,9 +81,10 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-      <div class="topnav" id="myTopnav" style="width:100%">
+      <div class="topnav" id="myTopnav" style="width:100%;">
         <div class="navigation-left" style="float:left">
           <ul class="navbar-nav mr-auto">
+
             <li>
               <a class="current" routerLink="/dashboard">Home</a>
             </li>
@@ -87,10 +95,6 @@
 
             <li>
               <a routerLink="/reqconnection">Connection Request</a>
-            </li>
-
-            <li>
-              <a routerLink="/device-usage">User Water Usage</a>
             </li>
 
           </ul>
@@ -128,7 +132,7 @@
           <td>{{msg.text}}</td>
           </tr>
     </table>
-  </div>
+    </div>
     <form (submit)="watson($event)" style="bottom: 8%; position:fixed;">
         <input type="textbox" placeholder="Enter your message" name="txt" [(ngModel)]="userData" style="width:70%;">
         <input class="btn" type="submit" value="Send">
