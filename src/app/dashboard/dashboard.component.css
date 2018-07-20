@@ -109,34 +109,12 @@ a:hover {
 .productpic .captioncolumn span { font-family: 'Oswald', sans-serif; font-weight: 300; font-size: 36px; position: relative; color: #2a286a; opacity: 1; }
 .productpic .captioncolumn:hover { opacity: 0.5;}
 
-/* * {
-    box-sizing: border-box;
-}
 
-body {
-    margin: 0;
-    font-family: Arial;
+.imgHolder {
+    position: relative;
 }
-
-.header {
-    text-align: center;
-    padding: 32px;
+.imgHolder span {
+    position: absolute;
+    left: 20px;
+    top: 15px;
 }
-
-/* Create two equal columns that floats next to each other */
-/* .column {
-    float: left;
-    width: 50%;
-    padding: 10px;
-}
-
-.column img {
-    margin-top: 12px;
-}
-
-/* Clear floats after the columns */
-/* .row:after {
-    content: "";
-    display: table;
-    clear: both;
-} */ 

@@ -48,20 +48,11 @@ export class DataService {
   //   });
   // }
 
-  public getDeviceData = () => {
-    //this.socket=socketIo('http://localhost:3000');
-    return Observable.create((observer) => {
-    this.socket.on('device data', (message) => {
-    observer.next(message);
-    });
-    });
-    }
-
 
     public getDeviceUsage = () => {
-      //this.socket=socketIo('http://localhost:3000');
       return Observable.create((observer) => {
       this.socket.on('total device usage', (message) => {
+        console.log(message);
       observer.next(message);
       });
       });
