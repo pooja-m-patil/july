@@ -1,4 +1,5 @@
 <h3 style="text-align:center;"><b>Connection List</b></h3>
+<h3 style="text-align:center; color:green"><b>{{connMsg}}</b></h3>
 <div>
   <table class="table table-hover">
     <thead>
@@ -7,6 +8,7 @@
         <th scope="col">Device Id</th>
         <th scope="col">Username</th>
         <th scope="col">Location</th>
+        <th></th>
         <th></th>
         <th></th>
       </tr>
@@ -18,16 +20,18 @@
         <td>{{list.username}}</td>
         <td>{{list.locationname}}</td>
         <td (click)="showMap(list.username,list.locationname,list.latitude,list.longitude,list._id)">
-          <button type="button" class="btn btn-primary">Show Location on Map</button>
+            <button type="button">Show Location on Map</button>
         </td>
-        <td (click)="getData(list._id)">
-          <button type="button" class="btn btn-primary">Get real time data</button>
-        </td>
+        <td><button (click)="stopConn(list._id)">Stop Connection</button></td>
+        <td><button (click)="restartConn(list._id)">Restart Connection</button></td>
       </tr>
     </tbody>
   </table>
 
 </div>
+
+
+
 <h2 style="text-align:center; color:green">{{msg}}</h2>
 <div *ngIf="showDevices">
 <div class="col-sm-3" style="top: 0cm">
@@ -59,7 +63,7 @@
     </agm-map>
 </div>
 
-<div *ngIf="chartData.length && showDataGraph" style="width:70%; margin-left:auto; margin-right:auto;">
+<!-- <div *ngIf="chartData.length && showDataGraph" style="width:70%; margin-left:auto; margin-right:auto;">
     <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
     </canvas>
-</div>
+</div> -->

@@ -3,6 +3,7 @@ import { Http, Response, Headers } from '@angular/http';
 import { DataService } from '../data.service';
 import { BaseChartDirective } from "ng2-charts/ng2-charts";
 import { UserService } from '../user.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-connection-list',
@@ -27,8 +28,10 @@ export class AdminConnectionListComponent implements OnInit {
   showDataGraph: boolean = false;
   showDevices: boolean = false;
   selectedDevice:any;
+  deviceUsage=[];
+  connMsg:string;
 
-  constructor(private http: Http, private dataService: DataService, private user: UserService) { }
+  constructor(private http: HttpClient, private dataService: DataService, private user: UserService) { }
 
   showMap = function (uname, loc, lat, lng, dId) {
     console.log(loc);
@@ -87,37 +90,60 @@ export class AdminConnectionListComponent implements OnInit {
     this.value = devID;
   }
 
-  getData = function (dId) {
-    console.log(dId);
-    this.selectedDevice=dId;
+  // getData = function (dId) {
+  //   console.log(dId);
+  //   this.selectedDevice=dId;
 
-    this.showMapToAdmin = false;
-    this.showMapToUser = false;
-    this.showDevices = false;
-    this.showDataGraph = true;
-    this.realTimeData = [];
-    this.chartLabels=[];
+  //   this.showMapToAdmin = false;
+  //   this.showMapToUser = false;
+  //   this.showDevices = false;
+  //   this.showDataGraph = true;
+  //   this.realTimeData = [];
+  //   this.chartLabels=[];
 
-    this.locObj = {
-      location: dId
+  //   this.locObj = {
+  //     location: dId
+  //   }
+
+  //   this.sub = this.dataService.getDeviceUsage()
+  //     .subscribe(socketData => {
+
+  //       for (let i = 0; i < socketData.length; i++) {
+  //         if (socketData[i].deviceId == this.selectedDevice) {
+  //           this.chartLabels.push(socketData[i].timestamp);
+  //           this.realTimeData.push(socketData[i].currentusage);
+  //           this.chartData = [{ data: this.realTimeData, label: this.selectedDevice }];
+  //         }
+  //       }
+  //       if (this.realTimeData.length == 10 || this.realTimeData.length > 10) {
+  //         this.realTimeData.splice(0, 1);
+  //         this.chartLabels.splice(0, 1);
+  //       }
+  //     })
+  // }
+
+  stopConn=function(devId){
+
+    this.dId={
+      "devId":devId
     }
 
-    this.sub = this.dataService.getDeviceUsage()
-      .subscribe(socketData => {
-
-        for (let i = 0; i < socketData.length; i++) {
-          if (socketData[i].deviceId == this.selectedDevice) {
-            this.chartLabels.push(socketData[i].timestamp);
-            this.realTimeData.push(socketData[i].currentusage);
-            this.chartData = [{ data: this.realTimeData, label: this.selectedDevice }];
-          }
-        }
-        if (this.realTimeData.length == 10 || this.realTimeData.length > 10) {
-          this.realTimeData.splice(0, 1);
-          this.chartLabels.splice(0, 1);
-        }
-      })
+    this.http.post("http://localhost:3000/stop-conn",this.dId).subscribe((res:Response) => {
+    console.log(res);
+    this.connMsg=res['_body'];
+  })
+    
   }
+
+  restartConn=function(deviceId){
+    this.dId={
+      "devId":deviceId
+    }
+    this.http.post("http://localhost:3000/restart-conn",this.dId).subscribe((res:Response) => {
+    console.log(res);
+    this.connMsg=res['_body'];
+  })
+}
 
   connectDevice = function (dId) {
     this.confirmObj["devId"] = dId;
@@ -132,10 +158,21 @@ export class AdminConnectionListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.http.get("http://localhost:3000/display/adminlist").subscribe(res => {
+    this.connMsg="";
+
+    this.http.get("http://localhost:3000/admin/adminlist").subscribe(res => {
      
-      var temp = res.json();
-      this.connList = temp.docs;
+    console.log(res);
+      // var temp = res;
+      // this.connList = temp;
     });
+
+    // this.dataService.getDeviceUsage()
+    // .subscribe(quote => {
+    //     console.log(quote);
+    //     this.deviceUsage=quote;
+    //     console.log(this.deviceUsage);
+    // })
+
   }
 }

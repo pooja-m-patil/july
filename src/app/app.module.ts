@@ -31,6 +31,9 @@ import { AdminConnectionListComponent } from './admin-connection-list/admin-conn
 import { ChatboxComponent } from './chatbox/chatbox.component';
 import {NavbarComponent } from './navbar/navbar.component';
 import { DeviceUsageComponent} from './device-usage/device-usage.component'
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { InterceptorService } from './interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 //import {GoogleMapsAPIWrapper} from "angular2-google-maps/core/services/google-maps-api-wrapper"
 //import {MapsAPILoader} from '@agm/core';
 
@@ -160,6 +163,7 @@ const appRoutes:Routes=[
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     ChartsModule,
     LocalStorageModule,
     AgmCoreModule.forRoot({
@@ -168,7 +172,13 @@ const appRoutes:Routes=[
     NgMultiSelectDropDownModule.forRoot()
     //AppRoutingModule
   ],
-  providers: [UserService,AuthguardGuard,DataService],
+  providers: [UserService,AuthguardGuard,DataService,InterceptorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

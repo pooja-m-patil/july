@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Credentials', true); 
   next();
 });
 
@@ -49,10 +49,13 @@ app.use(function (req, res, next) {
 app.use('/display',route);
 
 function verifyToken(req,res,next){
-  //console.log("verify token");
+  console.log("verify token");
   //console.log(req);
-  //console.log(req.headers['authorization']);
-  const tokenHeader=req.headers['authorization'];
+  console.log(req.headers);
+  //console.log(res.headers);
+ // console.log(req);
+  //console.log(req.headers['Authorization']);
+  var tokenHeader=req.headers['authorization'];
   console.log(tokenHeader)
   if(tokenHeader!=undefined){
     next();
@@ -65,10 +68,10 @@ function verifyToken(req,res,next){
 }
 
 
-app.use('/display', route);
-app.use('/display',  user);
-app.use('/display',  admin);
-app.use('/display',  watson);
+app.use('/display', verifyToken, route);
+app.use('/display', verifyToken,  user);
+app.use('/display',  verifyToken, admin);
+app.use('/display',  verifyToken, watson);
 
 
 
@@ -181,6 +184,7 @@ var appClient = new Client.IotfApplication(appClientConfig);
 appClient.connect();
 
 appClient.on("connect", function () {
+  allDevUsage=[];
   appClient.subscribeToDeviceEvents("+", '+', "status");
 });
 

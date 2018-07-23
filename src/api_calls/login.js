@@ -92,14 +92,13 @@ exports.getLoginInfo=function(uname,pass,callback)
   
     const user={
       username:body.docs[0]._id,
-      password:body.docs[0].Password
     }
 
     
     let status=bcrypt.compareSync(pass,pwd);
     if(status){
       console.log("true");
-      jwt.sign({user},'secretkey',(err,token)=>{
+      jwt.sign(body.docs[0]._id,'secretkey',(err,token)=>{
         callback({username:body.docs[0]._id,token});
       })
     }

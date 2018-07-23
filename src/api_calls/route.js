@@ -165,6 +165,12 @@ app.post("/login", function (request, response) {
 
 });
 
+app.get("/adminlist", function (request, response) {
+  console.log("admin list");
+  // list.connList(function (data) {
+  //   response.send(data);
+  // })
+})
 
 app.get("/", function (request, response) {
   console.log("fetch data");
