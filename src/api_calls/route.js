@@ -95,11 +95,11 @@ app.post("/datafetch", function (request, response) {
   console.log(name);
   server.getDevicesInfo(name, function (data) {
     console.log(data);
-    response.send(data);
+    response.json(data);
   });
 });
 
-app.post("/add", function (request, response) {
+app.post("/addNewDevice", function (request, response) {
 
   var devicename = request.body.devicename;
 
@@ -165,12 +165,12 @@ app.post("/login", function (request, response) {
 
 });
 
-app.get("/adminlist", function (request, response) {
-  console.log("admin list");
-  // list.connList(function (data) {
-  //   response.send(data);
-  // })
-})
+// app.get("/adminlist", function (request, response) {
+//   console.log("admin list");
+//   // list.connList(function (data) {
+//      response.send("data");
+//   // })
+// })
 
 app.get("/", function (request, response) {
   console.log("fetch data");

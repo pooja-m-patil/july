@@ -13,7 +13,7 @@ var service = new AssistantV1({
 
 var workspace_id = 'fd970b5d-c53d-4ced-b0ca-517efc5d8f0c'; // replace with workspace ID
 
-app.post("/welcome_assistant", function (request, res) {
+app.post("/welcome-msg", function (request, res) {
 
     service.message({
         workspace_id: workspace_id
@@ -34,7 +34,7 @@ app.post("/welcome_assistant", function (request, res) {
 })
 var txt;
 
-app.post("/watson_assistant", function (request, res) {
+app.post("/assistant", function (request, res) {
 
     var input = request.body.msg;
 
@@ -73,7 +73,7 @@ app.post("/watson_assistant", function (request, res) {
 
 });
 
-app.post("/watson_discovery", function (request, res) {
+app.post("/discovery", function (request, res) {
 
     console.log("Watson discovery");
     var input = request.body.msg;

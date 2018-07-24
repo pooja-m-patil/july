@@ -6,14 +6,20 @@ var request = require("request");
 var express1 = require('express-validation');
 var router = express.Router();
 var cors = require('cors');
-
+var cookieParser=require('cookie-parser');
+var logger=require('morgan');
+var path = require('path'); 
+var socketIo = require('socket.io');
+var watson = require('./src/api_calls/watson_service');
+var dev = require('./src/api_calls/devices');
 var route = require('./src/api_calls/route');
 var login=require('./src/api_calls/login-user');
 var user = require('./src/api_calls/user');
 var admin = require('./src/api_calls/admin');
-var socketIo = require('socket.io');
-var watson = require('./src/api_calls/watson_service');
-var dev = require('./src/api_calls/devices');
+const jwt=require('jsonwebtoken');
+var favicon = require('serve-favicon');
+var cors = require('cors');
+
 var status;
 var auth;
 var deviceId;
@@ -28,13 +34,25 @@ var rejectDevices=[];
 var deviceIdPresent=false;
 var devId;
 
-var server = app.listen(3000, function () {
-  console.log("Listening on port:3000");
-});
-
 app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(logger('dev'));
+app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+//app.use(express.static(path.join(__dirname, 'public')));
+
+// view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
+
+
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -46,34 +64,30 @@ app.use(function (req, res, next) {
 
 
 
-app.use('/display',route);
+app.use('/log',login);
 
-function verifyToken(req,res,next){
-  console.log("verify token");
-  //console.log(req);
-  console.log(req.headers);
-  //console.log(res.headers);
- // console.log(req);
-  //console.log(req.headers['Authorization']);
-  var tokenHeader=req.headers['authorization'];
-  console.log(tokenHeader)
-  if(tokenHeader!=undefined){
-    next();
-    //res.json({'token':'valid'})
-    
-  }else{
-    console.log("undefined");
-    //res.json({'token':'invalid'})
-  }
-}
+// app.use(function (req,res,next){
+//   console.log("verify token");
+//   console.log(req.headers);
+//   var tokenHeader=req.headers['authorization'];
+//   console.log(tokenHeader)
+//   if(tokenHeader!=undefined){
+//     return next();
+//     //return res.json({"token":"valid"});
+//   }else{
+//     console.log("undefined");
+//     return res.json({"token":"invalid"});
+//   }
+// })
 
+app.use('/display', route);
+app.use('/admins-api', admin);
+app.use('/user-api',  user);
+app.use('/watson', watson);
 
-app.use('/display', verifyToken, route);
-app.use('/display', verifyToken,  user);
-app.use('/display',  verifyToken, admin);
-app.use('/display',  verifyToken, watson);
-
-
+var server = app.listen(3000, function () {
+  console.log("Listening on port:3000");
+});
 
 devicesObj = {
   devArray: [],
@@ -271,5 +285,9 @@ app.post("/restart-conn", function (req, res) {
 app.get("/initarray", function (req, res) {
   res.send(devicesObj.emit());
 })
+
+
+
+
 
 module.exports = app;

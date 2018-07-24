@@ -74,7 +74,7 @@ export class NavbarComponent implements OnInit{
       "msg":this.msg
     }
     this.userData="";
-    this.http.post('http://localhost:3000/display/watson_assistant', this.msgObj)
+    this.http.post('http://localhost:3000/watson/assistant', this.msgObj)
     .subscribe((res:Response) =>{
 
       console.log(res);
@@ -83,7 +83,7 @@ export class NavbarComponent implements OnInit{
       if(temp=='Error'){
         console.log("Go to Discovery")
        
-        this.http.post('http://localhost:3000/display/watson_discovery', this.msgObj)
+        this.http.post('http://localhost:3000/watson/discovery', this.msgObj)
           .subscribe((res:Response) =>{
             console.log(res);
             var temp=res.json();
@@ -130,20 +130,13 @@ export class NavbarComponent implements OnInit{
       "self":this.self
     })
   }
-
-  discovery=function(){
-    this.http.post('http://localhost:3000/display/disc', "")
-   .subscribe((res:Response) =>{
-
-   })
-  }
   
 
   ngOnInit() {
 
    this.user.getCount();
 
-   this.http.post('http://localhost:3000/display/welcome_assistant', "")
+   this.http.post('http://localhost:3000/watson/welcome-msg', "")
    .subscribe((res:Response) =>{
 
      console.log(res);

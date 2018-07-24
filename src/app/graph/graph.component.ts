@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, Jsonp } from '@angular/http';
 import { BaseChartDirective } from "ng2-charts/ng2-charts";
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { empty } from 'rxjs/Observer';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-graph',
@@ -39,7 +41,7 @@ export class GraphComponent implements OnInit {
   dbData=[];
   graphLabel=[];
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
 
   }
 
@@ -48,7 +50,7 @@ export class GraphComponent implements OnInit {
     this.map = [];
     this.selectedAreaItems = [];
     this.http.get("http://localhost:3000/display/mapping").subscribe(res => {
-      var temp1 = res.json();
+      var temp1 = JSON.parse(JSON.stringify(res));
       console.log(temp1);
       for (let i = 0, c = 0, m = 0; i < 4; i++) {
         var dbcity = temp1.docs[i].city;
@@ -106,7 +108,7 @@ export class GraphComponent implements OnInit {
 
         console.log(res);
         this.totalLength++;
-        var temp = res.json();
+        var temp = JSON.parse(JSON.stringify(res));
         console.log(temp);
         var j=0,t;
 
@@ -190,7 +192,7 @@ export class GraphComponent implements OnInit {
     this.selectedCityItems = [];
 
     this.http.get("http://localhost:3000/display/cities").subscribe(res => {
-      var temp = res.json();
+      var temp = JSON.parse(JSON.stringify(res));
       console.log(temp);
       for (let i = 0; i < 3; i++) {
         this.arrcity[i] = temp.rows[i].doc.city;

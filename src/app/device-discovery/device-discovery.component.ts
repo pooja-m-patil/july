@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { DataService } from '../data.service';
 import { UserService } from '../user.service';
 import { Quote } from '@angular/compiler';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-device-discovery',
@@ -25,7 +26,7 @@ export class DeviceDiscoveryComponent implements OnInit {
   msg:string;
   showdiv:boolean=false;
 
-  constructor(private http:Http,private dataService: DataService,private user:UserService) {
+  constructor(private http:HttpClient,private dataService: DataService,private user:UserService) {
     //this.remoteDevices=[];
    }
 
@@ -35,7 +36,7 @@ export class DeviceDiscoveryComponent implements OnInit {
     {
       "devicename":id
     }
-    this.http.post("http://localhost:3000/display/add",this.productObj).subscribe((res:Response) => 
+    this.http.post("http://localhost:3000/display/addNewDevice",this.productObj).subscribe((res:Response) => 
     {
       this.temp=res['_body'];
       this.isAdded=true;

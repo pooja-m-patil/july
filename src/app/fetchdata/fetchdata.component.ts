@@ -13,7 +13,7 @@ import { InterceptorService } from '../interceptor.service'
 })
 export class FetchdataComponent implements OnInit {
   public model=new Model();
-  constructor(private http: Http,private httpClient: HttpClient,private user:UserService,private httpInt:InterceptorService) { }
+  constructor(private http: HttpClient,private user:UserService) { }
   
   deleteDevice = function(id) {
     console.log(id);
@@ -43,16 +43,17 @@ export class FetchdataComponent implements OnInit {
 showAuth=function(device)
   {
       let id = device['deviceId'];
-      console.log("id");
+      console.log("id showAuth");
       console.log(id);
       this.devObj={
           "name": id
         }
       
         this.http.post('http://localhost:3000/display/datafetch', this.devObj)
-        .subscribe((res:Response) =>{
+        .subscribe(res =>{
+          console.log(res);
           this.model.Token=id;
-          device.authToken =  res['_body'];
+          device.authToken =  res;
           console.log(res);
           return res;
         })
@@ -73,7 +74,7 @@ showAuth=function(device)
     // });
   
     console.log("uname "+this.model.uname);
-    this.httpClient.get("http://localhost:3000/display").subscribe(res=>{
+    this.http.get("http://localhost:3000/display").subscribe(res=>{
       console.log(res);
         this.model.isFetch=true;
         this.model.devices=res;

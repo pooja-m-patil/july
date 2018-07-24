@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { UserService } from '../user.service';
 import { DataService } from '../data.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-connected-devices',
@@ -22,7 +23,7 @@ export class ConnectedDevicesComponent implements OnInit {
   chartData=[];
 
 
-  constructor(private http: Http, private user:UserService,private dataService: DataService) { }
+  constructor(private http: HttpClient, private user:UserService,private dataService: DataService) { }
 
 
   showGraph=function(loc){
@@ -75,7 +76,7 @@ export class ConnectedDevicesComponent implements OnInit {
       "uname":this.user.getLog()
     }
 
-    this.http.post('http://localhost:3000/display/confirmed_devices', this.userNameObj)
+    this.http.post('http://localhost:3000/user-api/confirmed_devices', this.userNameObj)
         .subscribe((res:Response) =>{
 
           console.log(res);

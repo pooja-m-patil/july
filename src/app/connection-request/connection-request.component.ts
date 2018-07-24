@@ -3,6 +3,7 @@ import { Http, Response, Headers } from '@angular/http';
 import { UserService } from '../user.service';
 import { AgmCoreModule } from '@agm/core';
 import {MapsAPILoader} from '@agm/core';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-connection-request',
@@ -15,7 +16,7 @@ export class ConnectionRequestComponent implements OnInit {
   coordinates:object;
   rId:number;
 
-  constructor(private http: Http,private user:UserService) { 
+  constructor(private http: HttpClient,private user:UserService) { 
     this.latitude = 18.5204;
     this.longitude = 73.8567;
   }
@@ -79,7 +80,7 @@ reqNewDevice=function(e){
     console.log(this.latitude);
     console.log(this.longitude);
     console.log(this.productObj);
-    this.http.post("http://localhost:3000/display/reqconn",this.productObj).subscribe((res:Response) => {
+    this.http.post("http://localhost:3000/user-api/reqconn",this.productObj).subscribe((res:Response) => {
     
     console.log(res);
     var temp=res['_body'];

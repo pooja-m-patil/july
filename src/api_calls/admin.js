@@ -94,7 +94,7 @@ app.post("/confirmReq", function (request, response) {
 })
 
 
-app.post("/editConn", function (request, response) {
+app.put("/editConn", function (request, response) {
 
   var uname = request.body.username;
   var locname = request.body.locationname;

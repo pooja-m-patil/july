@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-requested-connection',
@@ -18,7 +19,7 @@ export class RequestedConnectionComponent implements OnInit {
   userRegDevices=[];
   displayDevices=[];
 
-  constructor(private http: Http,private router:Router,private user:UserService) { 
+  constructor(private http: HttpClient,private router:Router,private user:UserService) { 
 
   }
 
@@ -52,9 +53,9 @@ export class RequestedConnectionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get("http://localhost:3000/display/requested_conn").subscribe(res=>{
+    this.http.get("http://localhost:3000/admin-api/requested_conn").subscribe(res=>{
       console.log(res);
-      var temp=res.json();
+      var temp=JSON.parse(JSON.stringify(res));
       console.log(temp);
       console.log(temp.docs);
       this.connRequests=temp.docs;

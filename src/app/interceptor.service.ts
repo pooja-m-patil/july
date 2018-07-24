@@ -21,6 +21,7 @@ export class InterceptorService implements HttpInterceptor{
     
     request = request.clone({
       setHeaders: {
+        'Content-Type': 'application/json',
         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.YWRtaW5AZ3NsYWIuY29t.01YKWEq5yogIUMCkLw3wCEa_6I8vQvQWWF-XDmj7UpQ'
       }
     });

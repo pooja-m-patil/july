@@ -60,16 +60,16 @@ export class AdminConnectionListComponent implements OnInit {
     }
 
     this.showDevices = true;
-    this.http.get("http://localhost:3000/display/getIOTDevices").subscribe((res: Response) => {
-      var temp = res.json();
+    this.http.get("http://localhost:3000/admins-api/getIOTDevices").subscribe((res: Response) => {
+      var temp = JSON.parse(JSON.stringify(res));
     
       for (let i = 0; i < temp.docs.length; i++) {
         this.iotDevices[i] = temp.docs[i]._id;
       }
       
-      this.http.get("http://localhost:3000/display/getConfirmedDevices").subscribe((res: Response) => {
+      this.http.get("http://localhost:3000/admins-api/getConfirmedDevices").subscribe((res: Response) => {
   
-        var temp = res.json();
+        var temp = JSON.parse(JSON.stringify(res));
         
         for (let i = 0; i < temp.docs.length; i++) {
           this.userRegDevices[i] = temp.docs[i]._id;
@@ -147,7 +147,8 @@ export class AdminConnectionListComponent implements OnInit {
 
   connectDevice = function (dId) {
     this.confirmObj["devId"] = dId;
-    this.http.post("http://localhost:3000/display/editConn", this.confirmObj).subscribe((res: Response) => {
+    this.http.post("http://localhost:3000/admins-api/editConn/", this.confirmObj).subscribe((res: Response) => {
+      var temp=JSON.parse(JSON.stringify(res));
       if (res.ok == true) {
         console.log("delete reg devices");
         this.ngOnInit();
@@ -160,11 +161,11 @@ export class AdminConnectionListComponent implements OnInit {
 
     this.connMsg="";
 
-    this.http.get("http://localhost:3000/admin/adminlist").subscribe(res => {
-     
-    console.log(res);
-      // var temp = res;
-      // this.connList = temp;
+    console.log("init");
+
+    this.http.get("http://localhost:3000/admins-api/adminlist").subscribe(res => {
+      var temp=JSON.parse(JSON.stringify(res));
+      this.connList = temp.docs;
     });
 
     // this.dataService.getDeviceUsage()
