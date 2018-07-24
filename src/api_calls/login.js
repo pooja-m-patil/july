@@ -15,13 +15,8 @@ exports.getLoginInfo=function(uname,pass,callback)
   var request = require("request");
 
   var options = { method: 'POST',
-  url: auth.dbUrl+'register/_find',
-  headers: 
-   { 'postman-token': '40968373-8aee-480d-1f8d-590ab69b704b',
-     'cache-control': 'no-cache',
-     'content-type': 'application/json',
-     authorization: auth.dbAuth
-     },
+  url: auth.DBURL+'register/_find',
+  headers:auth.DBAUTH,
   body: 
    { selector: { _id: { '$gt': '0' }, _id: uname },
      sort: [ { _id: 'asc' } ] },

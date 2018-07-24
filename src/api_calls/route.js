@@ -13,52 +13,7 @@ var map = require('./map.js');
 var city = require('../city.js');
 var reg = require('./register.js');
 var type = require('./devicetypes');
-const jwt=require('jsonwebtoken')
-
-
-var vcapLocal;
-try {
-  vcapLocal = require('./vcap-local.json');
-  console.log("Loaded local VCAP", vcapLocal);
-} catch (e) { }
-
-const appEnvOpts = vcapLocal ? { vcap: vcapLocal } : {}
-
-const appEnv = cfenv.getAppEnv(appEnvOpts);
-
-if (appEnv.services['cloudantNoSQLDB'] || appEnv.getService(/cloudant/)) {
-  // Load the Cloudant library.
-  var Cloudant = require('cloudant');
-
-  // Initialize database with credentials
-  if (appEnv.services['cloudantNoSQLDB']) {
-    // CF service named 'cloudantNoSQLDB'
-    var cloudant = Cloudant(appEnv.services['cloudantNoSQLDB'][0].credentials);
-  } else {
-    // user-provided service with 'cloudant' in its name
-    var cloudant = Cloudant(appEnv.getService(/cloudant/).credentials);
-  }
-
-  //database name
-  var dbName = 'mydbiot';
-  var dbName1 = 'login';
-
-  // Create a new "mydb" database.
-  cloudant.db.create(dbName, function (err, data) {
-    if (!err) //err if database doesn't already exists
-      console.log("Created database: " + dbName);
-  });
-
-  cloudant.db.create(dbName1, function (err, data) {
-    if (!err) //err if database doesn't already exists
-      console.log("Created database: " + dbName1);
-  });
-
-  // Specify the database we are going to use (mydb)...
-  mydbiot = cloudant.db.use(dbName);
-  login = cloudant.db.use(dbName);
-}
-
+const jwt=require('jsonwebtoken');
 
 
 app.use(bodyParser.json());
@@ -78,7 +33,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.post("/register", function (request, response) {
-  //console.log(request.body.username);
   var uname = request.body.email;
   var pass1 = request.body.pass1;
   console.log(uname + " " + " " + pass1);
@@ -90,36 +44,30 @@ app.post("/register", function (request, response) {
 
 
 app.post("/datafetch", function (request, response) {
-  console.log(request.body.name);
   var name = request.body.name;
-  console.log(name);
   server.getDevicesInfo(name, function (data) {
-    console.log(data);
     response.json(data);
   });
 });
 
-app.post("/addNewDevice", function (request, response) {
+// app.post("/addNewDevice", function (request, response) {
 
-  var devicename = request.body.devicename;
+//   var devicename = request.body.devicename;
 
-  server.addDevice(devicename, function (data) {
-    console.log(data.authToken);
-    var deviceId = data.deviceId;
-    console.log(data);
+//   server.addDevice(devicename, function (data) {
+//     var deviceId = data.deviceId;
 
-    server.addToDb(devicename, data, function (data) {
-      console.log(data);
-    })
+//     server.addToDb(devicename, data, function (data) {
+//     })
 
-    if (data.authToken) {
-      response.send(data.authToken);
-    }
-    else {
-      response.send("");
-    }
-  });
-});
+//     if (data.authToken) {
+//       response.send(data.authToken);
+//     }
+//     else {
+//       response.send("");
+//     }
+//   });
+// });
 
 
 
@@ -131,9 +79,6 @@ app.post("/adddev", function (request, response) {
   var subject = request.body.devicedesc;
 
   console.log(classname + " " + subject);
-  //found=devicename.match(/[a-z]{1,7}/);
-  //if(found)
-  //{
   server.regDevice(devicename, devicetype, classname, subject, function (data) {
     console.log(data.authToken);
     var deviceId = data.deviceId;
@@ -144,11 +89,6 @@ app.post("/adddev", function (request, response) {
     });
     response.send("Device Added successfully. Auth Token is : " + data.authToken);
   });
-  //}
-  //else
-  //{
-  //response.send("Error!! Please Enter valid name");
-  //}
 });
 
 app.post("/login", function (request, response) {
@@ -229,29 +169,10 @@ app.get("/cities", function (request, response) {
 //   response.send("200 ok");
 // });
 
-app.get("/dtype", function (request, response) {
-  type.getTypes(function (data) {
-    //console.log(data);
-    response.send(data);
-  });
-});
-
-
-// function verifyToken(req,res,next){
-//   console.log("verify token");
-//   console.log(req);
-//   console.log(req.headers['authorization']);
-//   const tokenHeader=req.headers['authorization'];
-//   console.log(tokenHeader)
-//   if(tokenHeader!=undefined){
-//     res.json({'token':'valid'})
-//     //res.next({'token':'valid'})
-//   }else{
-//     console.log("undefined");
-//     res.json({'token':'invalid'})
-//     //next({'token':'invalid'})
-//   }
-// }
-
+// app.get("/dtype", function (request, response) {
+//   type.getTypes(function (data) {
+//     response.send(data);
+//   });
+// });
 
 module.exports = app;

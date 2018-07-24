@@ -1,6 +1,6 @@
 var cfenv = require("cfenv");
 var request = require("request");
-var auth=require("./credentials");
+var auth = require("./credentials");
 var mydbiot;
 temp: any = {};
 
@@ -10,14 +10,8 @@ exports.addDevice = function (devicename, callback) {
   var result;
   var options = {
     method: 'POST',
-    url: auth.ibmUrl+'iotbootcamp/devices',
-    headers:
-      {
-        'Postman-Token': '8bd972f8-1170-466a-a931-ee93601a6213',
-        'Cache-Control': 'no-cache',
-        Authorization: auth.ibmAuth,
-        'Content-Type': 'application/json'
-      },
+    url: auth.IBMURL + 'iotbootcamp/devices',
+    headers: auth.IBMAUTH,
     body:
       {
         deviceId: devicename,
@@ -50,14 +44,8 @@ exports.regDevice = function (devicename, devicetype, classname, subject, callba
   var result;
   var options = {
     method: 'POST',
-    url: auth.ibmUrl+'iotbootcamp/devices',
-    headers:
-      {
-        'Postman-Token': '8bd972f8-1170-466a-a931-ee93601a6213',
-        'Cache-Control': 'no-cache',
-        Authorization: auth.ibmAuth,
-        'Content-Type': 'application/json'
-      },
+    url: auth.IBMURL + 'iotbootcamp/devices',
+    headers: auth.IBMAUTH,
     body:
       {
         deviceId: devicename,
@@ -90,13 +78,8 @@ exports.getDevices = function (callback) {
   console.log("get devices");
   var options = {
     method: 'GET',
-    url: auth.ibmUrl+'iotbootcamp/devices',
-    headers:
-      {
-        'Postman-Token': '889a56b4-31d1-461b-8221-b8279337aa38',
-        'Cache-Control': 'no-cache',
-        Authorization: auth.ibmAuth
-      }
+    url: auth.IBMURL + 'iotbootcamp/devices',
+    headers: auth.IBMAUTH
   };
 
   request(options, function (error, response, body) {
@@ -110,13 +93,8 @@ exports.delDevice = function (devName, callback) {
   var name = devName
   var options = {
     method: 'DELETE',
-    url: auth.ibmUrl+"iotbootcamp/devices/" + devName,
-    headers:
-      {
-        'Postman-Token': 'cf551324-1db8-4a48-a59c-d6474111f363',
-        'Cache-Control': 'no-cache',
-        Authorization: auth.ibmAuth
-      }
+    url: auth.IBMURL + "iotbootcamp/devices/" + devName,
+    headers: auth.IBMAUTH
   };
 
   request(options, function (error, response, body) {
@@ -130,14 +108,8 @@ exports.getDevicesInfo = function (id, callback) {
   console.log(id);
   var options = {
     method: 'POST',
-    url: auth.dbUrl+'/mydbiot/_find',
-    headers:
-      {
-        'postman-token': 'fed52f4d-d985-f124-04dc-68048e028e27',
-        'cache-control': 'no-cache',
-        authorization: auth.dbAuth,
-        'content-type': 'application/json'
-      },
+    url: auth.DBURL + 'mydbiot/_find',
+    headers: auth.DBAUTH,
     body:
       {
         selector: { _id: id },
@@ -152,8 +124,8 @@ exports.getDevicesInfo = function (id, callback) {
 
     console.log(body);
     console.log(body.docs[0].data.authToken);
-     callback(body.docs[0].data.authToken);
-});
+    callback(body.docs[0].data.authToken);
+  });
 }
 
 exports.addToDb = function (id, data, callback) {
@@ -161,41 +133,14 @@ exports.addToDb = function (id, data, callback) {
 
   var options = {
     method: 'POST',
-    url: auth.dbUrl+'mydbiot',
-    headers:
-      {
-        'postman-token': '305369eb-c300-3bcb-3c9e-0d7056f10878',
-        'cache-control': 'no-cache',
-        authorization: auth.dbAuth,
-        'content-type': 'application/json'
-      },
+    url: auth.DBURL + 'mydbiot',
+    headers: auth.DBAUTH,
     body: { _id: id, data: data, reqId: "", username: "", locationname: "", latitude: null, longitude: null },
     json: true
   };
 
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
-
     console.log(body);
   });
-
 }
-
-// exports.getData=function(callback)
-// {
-//   console.log("map");
-//   mydbiot.list({include_docs:true},function(err, data) {
-//     console.log('Error:', err);
-//     console.log(data.rows);
-//     callback(data);
-// });
-// }
-// exports.getLoginInfo=function(id)
-// {
-//   console.log(id);
-//   mydbiot.get('cc8c910b9b7456a0710ac36d21607cfb',function(err, data) {
-//     //console.log('Error:', err);
-//     console.log(data);
-//     //callback(data);
-// });
-// }

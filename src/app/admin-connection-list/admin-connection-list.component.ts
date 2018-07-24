@@ -147,7 +147,7 @@ export class AdminConnectionListComponent implements OnInit {
 
   connectDevice = function (dId) {
     this.confirmObj["devId"] = dId;
-    this.http.post("http://localhost:3000/admins-api/editConn/", this.confirmObj).subscribe((res: Response) => {
+    this.http.post("http://localhost:3000/admins-api/editConn", this.confirmObj).subscribe((res: Response) => {
       var temp=JSON.parse(JSON.stringify(res));
       if (res.ok == true) {
         console.log("delete reg devices");

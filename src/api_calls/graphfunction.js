@@ -15,14 +15,8 @@ exports.getData = function (d1, d2, dId, callback) {
 
   var options = {
     method: 'POST',
-    url: auth.dbUrl+'real_time_device_data/_find',
-    headers:
-      {
-        'postman-token': 'b45fd7ee-6284-5e9f-4126-2b5cdb6b405c',
-        'cache-control': 'no-cache',
-        authorization: auth.dbAuth,
-        'content-type': 'application/json'
-      },
+    url: auth.DBURL+'real_time_device_data/_find',
+    headers:auth.DBAUTH,
     body:
       {
         selector:
