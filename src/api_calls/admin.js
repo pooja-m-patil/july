@@ -18,8 +18,7 @@ var auth = require("./credentials");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/adminlist", function (request, response) {
-  console.log("admin list");
+app.get("/connections", function (request, response) {
   list.connList(function (data) {
     response.send(data);
   })
@@ -33,14 +32,14 @@ app.get("/requested_conn", function (request, response) {
   });
 })
 
-app.get("/getIOTDevices", function (request, response) {
+app.get("/ibm-devices", function (request, response) {
 
   addDev.getIOTDevice(function (data) {
     response.send(data);
   })
 })
 
-app.post("/confirmReq", function (request, response) {
+app.post("/connections", function (request, response) {
 
   var uname = request.body.username;
   var locname = request.body.locationname;
@@ -78,7 +77,7 @@ app.post("/confirmReq", function (request, response) {
 })
 
 
-app.post("/editConn", function (request, response) {
+app.patch("/connections", function (request, response) {
 
   var uname = request.body.username;
   var locname = request.body.locationname;
@@ -112,8 +111,6 @@ app.post("/editConn", function (request, response) {
         console.log(body);
 
         confirm.confirmUserReq(newDId, data1, uname, locname, lat, lng, function (data) {
-          console.log(data);
-          console.log("data");
           response.send(data);
         });
       });
@@ -121,15 +118,14 @@ app.post("/editConn", function (request, response) {
   })
 });
 
-app.get("/getRealTimeData", function (request, response) {
-  console.log("real time data");
-  devData.getDeviceData(function (data2) {
-    response.send(data2);
-  })
-})
+// app.get("/getRealTimeData", function (request, response) {
+//   devData.getDeviceData(function (data2) {
+//     response.send(data2);
+//   })
+// })
 
 
-app.get('/getConfirmedDevices', function (request, response) {
+app.get('/connected-devices', function (request, response) {
   getDev.userConnDevices(function (data) {
     response.send(data);
   })

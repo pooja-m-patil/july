@@ -32,69 +32,41 @@ export class DeviceDiscoveryComponent implements OnInit {
 
   discdevice=function(id)
   {
-    this.productObj=
+    this.deviceObj=
     {
       "devicename":id
     }
-    this.http.post("http://localhost:3000/display/addNewDevice",this.productObj).subscribe((res:Response) => 
+    this.http.post("http://localhost:3000/apis/devices",this.deviceObj).subscribe((res:Response) => 
     {
-      this.temp=res['_body'];
+      this.temp=JSON.parse(JSON.stringify(res));
       this.isAdded=true;
-      this.obj=
+      this.deviceObj=
       {
         "added":this.temp,
         "id":id
       }
-      this.http.post("http://localhost:3000/remoteApp",this.obj).subscribe((res:Response) => {
+      this.http.post("http://localhost:3000/devices",this.deviceObj).subscribe((res:Response) => {
       })
     })
   }
 
-  getDevices=function()
-  {
-    if(this.remoteDevices.length==0)
-    {
-      console.log("no dev");
-      this.msg="No devices available";
-    }
-    this.dataService.getQuotes()
-    .subscribe(quote => {
-      console.log(quote);
-      this.flag=0;
-      this.showdiv=true;
-  
-    })
-      console.log(this.remoteDevices);
-  }
-
   ngOnInit() {
-   
-  this.http.get("http://localhost:3000/initarray").subscribe((res:Response) => {
-    console.log(res);
-    //var temp=res.json();
-    //console.log(temp);
-    //this.remoteDevices=res
-  })
 
   if(this.remoteDevices.length==0){
-    console.log("no dev");
     this.msg="No devices available";
   }
   
-  this.sub = this.dataService.getQuotes()
-  .subscribe(quote => {
-    console.log(quote);
-    this.flag=0;
-   this.remoteDevices=quote.slice(0);
-   this.showdiv=true;
+  this.sub = this.dataService.getAvailableDevices()
+  .subscribe(data => {
+    //this.flag=0;
+    this.remoteDevices=data.slice(0);
+    this.showdiv=true;
   })
-    console.log(this.remoteDevices);
   }
 
   ngOnDestroy() {
     //clearInterval(this.interval);
-    this.user.resetCount();
-    //this.sub.unsubscribe();
+    //this.user.resetCount();
   }
 
 }

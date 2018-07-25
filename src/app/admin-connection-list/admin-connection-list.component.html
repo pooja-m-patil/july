@@ -27,22 +27,17 @@
       </tr>
     </tbody>
   </table>
-
 </div>
 
 
-
 <h2 style="text-align:center; color:green">{{msg}}</h2>
-<div *ngIf="showDevices">
-<div class="col-sm-3" style="top: 0cm">
+<div *ngIf="showDevices" class="col-sm-3" style="top: 0cm">
   <table class="table table-hover" align="left" border=1>
         <th style="background-color: lightslategrey; color: white">Device Id</th>
         <tr *ngFor="let device of displayDevices; let i=index;">
           <td><a href={{device}}>{{device}}</a></td>
         </tr>
   </table>
-</div>
-
 </div>
 
 <div *ngIf="showMapToAdmin==true">
@@ -55,15 +50,3 @@
     </agm-marker>
 </agm-map>
 </div>
-
-<div *ngIf="showMapToUser==true">
-  <agm-map [latitude]="latitude" [longitude]="longitude">
-    <agm-marker [latitude]="latitude" [longitude]="longitude">
-    </agm-marker>
-    </agm-map>
-</div>
-
-<!-- <div *ngIf="chartData.length && showDataGraph" style="width:70%; margin-left:auto; margin-right:auto;">
-    <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
-    </canvas>
-</div> -->

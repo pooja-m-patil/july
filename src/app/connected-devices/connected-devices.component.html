@@ -1,5 +1,4 @@
 <div>
-
   <table class="table table-hover">
       <thead>
         <tr>
@@ -14,7 +13,7 @@
           <td>{{i+1}}</td>
           <td>{{loc._id}}</td>
           <td>{{loc.locationname}}</td>
-          <td (click)="showGraph(loc.locationname)"><button type="button" class="btn btn-primary">Show Location on Map</button></td>
+          <td (click)="showMap(loc.locationname)"><button type="button" class="btn btn-primary">Show Location on Map</button></td>
           <td (click)="getData(loc._id)">
             <button type="button" class="btn btn-primary">Get real time data</button>
           </td>

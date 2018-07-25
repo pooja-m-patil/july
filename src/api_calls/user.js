@@ -11,7 +11,7 @@ var usrDev=require('../user_calls/userDevices')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/reqconn", function (request, response) {
+app.post("/connection-requests", function (request, response) {
     
     var rId=request.body.rId;
     var username=request.body.username;
@@ -26,11 +26,9 @@ app.post("/reqconn", function (request, response) {
   });
 })
 
-app.post("/confirmed_devices", function (request, response) {
+app.get("/connected-devices/:username", function (request, response) {
     
-  var username=request.body.uname;
- 
-  console.log('user req');
+  var username=request.params.username;
 
   usrDev.confirmedUserDevices(username,function(data){
 

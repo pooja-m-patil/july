@@ -74,12 +74,13 @@ export class NavbarComponent implements OnInit{
       "msg":this.msg
     }
     this.userData="";
-    this.http.post('http://localhost:3000/watson/assistant', this.msgObj)
+    this.http.post('http://localhost:3000/watson/assistants', this.msgObj)
     .subscribe((res:Response) =>{
 
       console.log(res);
       this.self=false;
-      var temp=res['_body'];
+      var response=JSON.parse(JSON.stringify(res));
+      var temp=response['_body'];
       if(temp=='Error'){
         console.log("Go to Discovery")
        
@@ -136,11 +137,12 @@ export class NavbarComponent implements OnInit{
 
    this.user.getCount();
 
-   this.http.post('http://localhost:3000/watson/welcome-msg', "")
+   this.http.get('http://localhost:3000/watson/assistants')
    .subscribe((res:Response) =>{
 
      console.log(res);
-     this.msg=res['_body'];
+     var temp=JSON.parse(JSON.stringify(res));
+     this.msg=temp['_body'];
      console.log(this.msg);
      this.pushData();
      

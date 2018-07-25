@@ -1,8 +1,9 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import {RequestOptions, Request, RequestMethod} from '@angular/http';
+import { RequestOptions, Request, RequestMethod } from '@angular/http';
 import { Router } from '@angular/router';
 import { Model } from '../model';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,19 +12,16 @@ import { Model } from '../model';
 })
 
 export class DashboardComponent implements OnInit {
-  public model=new Model();
-  
-  constructor(private http: Http,private router:Router) {
-    
-    
-    
+  public model = new Model();
+
+  showGrid = false;
+
+  constructor(private http: Http, private router: Router, private user: UserService) { }
+
+  ngOnInit() {
+
+    if (this.user.getLog() == 'admin@gslab.com') {
+      this.showGrid = true;
+    }
   }
-
-  
-
-  
-
-
-  ngOnInit() {}
-  
 }

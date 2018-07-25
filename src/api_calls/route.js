@@ -43,32 +43,12 @@ app.post("/register", function (request, response) {
 });
 
 
-app.post("/datafetch", function (request, response) {
-  var name = request.body.name;
-  server.getDevicesInfo(name, function (data) {
+app.get("/data/:deviceId", function (request, response) {
+  var deviceId = request.params.deviceId;
+  server.getDevicesInfo(deviceId, function (data) {
     response.json(data);
   });
 });
-
-// app.post("/addNewDevice", function (request, response) {
-
-//   var devicename = request.body.devicename;
-
-//   server.addDevice(devicename, function (data) {
-//     var deviceId = data.deviceId;
-
-//     server.addToDb(devicename, data, function (data) {
-//     })
-
-//     if (data.authToken) {
-//       response.send(data.authToken);
-//     }
-//     else {
-//       response.send("");
-//     }
-//   });
-// });
-
 
 
 app.post("/adddev", function (request, response) {
@@ -105,14 +85,7 @@ app.post("/login", function (request, response) {
 
 });
 
-// app.get("/adminlist", function (request, response) {
-//   console.log("admin list");
-//   // list.connList(function (data) {
-//      response.send("data");
-//   // })
-// })
-
-app.get("/", function (request, response) {
+app.get("/devices", function (request, response) {
   console.log("fetch data");
   server.getDevices(function (data) {
     console.log(data);
@@ -120,28 +93,23 @@ app.get("/", function (request, response) {
   });
 });
 
-app.delete("/del", function (request, response) {
-  var dev = request.body.name;
-  console.log(dev);
-  server.delDevice(dev, function (data) {
-    console.log("data: " + data);
+//Delete device from IBM IOT platform
+app.delete("/devices/:deviceId", function (request, response) {
+  var deviceId = request.params.deviceId;
+  server.delDevice(deviceId, function (data) {
     response.send(data);
   });
-
 });
 
-app.post("/graph", function (request, response) {
+app.get("/graph", function (request, response) {
 
-  var d1 = request.body.d1;
-  var d2 = request.body.d2;
-  var dId = request.body.dId;
+  var deviceId=request.params.deviceId;
+  var date1=request.query.date1;
+  var date2=request.query.date2;
 
-  server1.getData(d1,d2,dId, function (data) {
-    console.log(d1+" "+d2+" "+dId);
-    console.log(data);
+  server1.getData(date1,date2,deviceId, function (data) {
     response.send(data);
   });
-
 })
 
 
@@ -158,21 +126,26 @@ app.get("/cities", function (request, response) {
 });
 
 
-// app.post("/devicediscovery", function (request, response) {
-//   var deviceId=request.body.deviceId;
-//   var desc="device";
-//   console.log(deviceId);
-//   disc.deviceDisc(deviceId,desc,function(data){
-//     response.send(data);
-//   })
-//   console.log(deviceId);
-//   response.send("200 ok");
-// });
+app.post("/devices", function (request, response) {
 
-// app.get("/dtype", function (request, response) {
-//   type.getTypes(function (data) {
-//     response.send(data);
-//   });
-// });
+  var devicename = request.body.devicename;
+
+  server.addDevice(devicename, function (data) {
+    console.log(data.authToken);
+    var deviceId = data.deviceId;
+    console.log(data);
+
+    server.addToDb(devicename, data, function (data) {
+      console.log(data);
+    })
+
+    if (data.authToken) {
+      response.json(data.authToken);
+    }
+    else {
+      response.send("");
+    }
+  });
+});
 
 module.exports = app;

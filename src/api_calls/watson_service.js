@@ -4,16 +4,16 @@ var app = express();
 var prompt = require('prompt-sync')();
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
 
-// Set up Assistant service wrapper.
+// Assistant service wrapper.
 var service = new AssistantV1({
-    username: 'bf080d0a-4a64-425d-a931-27a0b1d8803a', // replace with service username
-    password: '5LLFJtgO403m', // replace with service password
+    username: 'bf080d0a-4a64-425d-a931-27a0b1d8803a', // service username
+    password: '5LLFJtgO403m', // service password
     version: '2018-02-16'
 });
 
-var workspace_id = 'fd970b5d-c53d-4ced-b0ca-517efc5d8f0c'; // replace with workspace ID
+var workspace_id = 'fd970b5d-c53d-4ced-b0ca-517efc5d8f0c'; // workspace ID
 
-app.post("/welcome-msg", function (request, res) {
+app.get("/assistants", function (request, res) {
 
     service.message({
         workspace_id: workspace_id
@@ -34,7 +34,7 @@ app.post("/welcome-msg", function (request, res) {
 })
 var txt;
 
-app.post("/assistant", function (request, res) {
+app.post("/assistants", function (request, res) {
 
     var input = request.body.msg;
 
@@ -50,17 +50,14 @@ app.post("/assistant", function (request, res) {
 
     function processResponse(err, response) {
         if (err) {
-            //console.error(err);
             return;
         }
 
         if (response.intents != "") {
-            //console.log()
             if (response.output.text.length != 0) {
                 console.log(JSON.stringify(response, null, 2));
                 console.log(response.output.text[0]);
                 txt = response.context;
-                //console.log(txt);
                 res.send(response.output.text[0]);
             }
         }
@@ -69,8 +66,6 @@ app.post("/assistant", function (request, res) {
             res.send("Error");
         }
     }
-
-
 });
 
 app.post("/discovery", function (request, res) {
@@ -97,10 +92,6 @@ app.post("/discovery", function (request, res) {
     
     request(options, function (error, response, body) {
       if (error) throw new Error(error);
-    
-      //console.log(body);
-    
-        console.log(body.results[0])
         res.send(response.body);
     });
 

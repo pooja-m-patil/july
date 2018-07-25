@@ -1,20 +1,7 @@
 
 <div class="item" style="background-image:  url('assets/images/water_splash_shutterstock_111547814-1502757469-7649.jpg');"></div>
 
-
-
-<!-- <marquee behavior="scroll" direction="left" scrollamount="16" > -->
-
-  <!-- <div class="productpic" style="width: 1450px;  height: 600px;  border: solid 2px #ccc; float: left;">
-    <a routerLink="/fetchdata"><img src="/assets/images/maxresdefaults.jpg" height="550" width="660" style="border-radius: 8px; border-color: white;">
-    </a> 
-  
-    <a routerLink="/graph"><img src="/assets/images/graph.jpg" height="550" width="660" style="border-radius: 8px; border-color: white;">
-    </a> 
-  </div> -->
-<!-- </marquee> -->
-
-<div class="row"> 
+<div class="row" *ngIf="showGrid"> 
     <div class="column">
         <div class="imgHolder">
             <a routerLink="/device-usage"><img src="/assets/images/conn.gif" height="300" width="660"></a>

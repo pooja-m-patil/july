@@ -47,7 +47,7 @@ export class MappingDevicesComponent implements OnInit {
       "deviceId":dId
     }
 
-    this.http.post("http://localhost:3000/display/confirmReq",this.confirmObj).subscribe((res:Response) => 
+    this.http.post("http://localhost:3000/admins-api/connections",this.confirmObj).subscribe((res:Response) => 
     {
         console.log(res);
         console.log(res.ok);
@@ -71,7 +71,7 @@ export class MappingDevicesComponent implements OnInit {
     console.log(this.latitude);
     console.log(this.longitude);
     
-    this.http.get("http://localhost:3000/display/getIOTDevices").subscribe((res:Response) => 
+    this.http.get("http://localhost:3000/admin-apis/getIOTDevices").subscribe((res:Response) => 
       {
         console.log(res);
         var temp=res.json();
@@ -82,7 +82,7 @@ export class MappingDevicesComponent implements OnInit {
           this.iotDevices[i]=temp.docs[i]._id;
         }
         console.log(this.iotDevices);
-        this.http.get("http://localhost:3000/display/getConfirmedDevices").subscribe((res:Response) => 
+        this.http.get("http://localhost:3000/admin-apis/getConfirmedDevices").subscribe((res:Response) => 
         {
           console.log(res);
           var temp=res.json();

@@ -27,7 +27,7 @@ export class DataService {
   //   });
   // }
 
-  public getQuotes = () => {
+  public getAvailableDevices = () => {
     //this.socket=socketIo('http://localhost:3000');
     return Observable.create((observer) => {
     this.socket.on('Available devices', (message) => {

@@ -11,89 +11,72 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 })
 export class ConnectedDevicesComponent implements OnInit {
 
-  userNameObj:object;
-  location=[];
-  latitude:number;
-  longitude:number;
-  deviceData=[];
-  showMap:boolean;
-  locObj:object;
-  chartLabels=[];
-  realTimeData=[];
-  chartData=[];
+  userNameObj: object;
+  location = [];
+  latitude: number;
+  longitude: number;
+  deviceData = [];
+  locObj: object;
+  chartLabels = [];
+  realTimeData = [];
+  chartData = [];
 
 
-  constructor(private http: HttpClient, private user:UserService,private dataService: DataService) { }
+  constructor(private http: HttpClient, private user: UserService, private dataService: DataService) { }
 
-
-  showGraph=function(loc){
-    this.showDataGraph=false;
-    console.log(loc);
-    for(let i=0;i<this.deviceData.length;i++){
-      if(loc==this.deviceData[i].locationname){
-        this.latitude=parseFloat(this.deviceData[i].latitude);
-        this.longitude=parseFloat(this.deviceData[i].longitude);
+  //Showing exact location of device on map.
+  showMap = function (loc) {
+    this.showDataGraph = false;
+    for (let i = 0; i < this.deviceData.length; i++) {
+      if (loc == this.deviceData[i].locationname) {
+        this.latitude = parseFloat(this.deviceData[i].latitude);
+        this.longitude = parseFloat(this.deviceData[i].longitude);
       }
     }
-    this.showMapToUser=true;
-    console.log(this.latitude+" "+this.longitude);
+    this.showMapToUser = true;
   }
 
+
+  //Showing real time data to user.
   getData = function (dId) {
 
-    this.showMapToUser=false;
-    this.showDataGraph=true;
-
-    console.log(dId);
-
-    this.locObj={
-      location:dId
+    this.showMapToUser = false;
+    this.showDataGraph = true;
+    this.locObj = {
+      location: dId
     }
+    this.sub = this.dataService.getDeviceUsage()
+      .subscribe(devicedata => {
 
-    this.http.post("http://localhost:3000/real-time-data",this.locObj).subscribe(res => {
-      console.log(res);
-    })
+        for (let i = 0; i < devicedata.length; i++) {
+          this.chartLabels.push(devicedata[i].timestamp);
+          this.realTimeData.push(devicedata[i].currentusage);
+        }
 
-    this.sub = this.dataService.getDeviceData()
-      .subscribe(quote => {
-        console.log(quote);
-        this.chartLabels.push(quote.time);
-        this.realTimeData.push(quote.usage);
-        console.log(quote.time);
-        console.log(this.realTimeData);
         this.chartData = [{ data: this.realTimeData, label: dId }];
 
         if (this.realTimeData.length == 10 || this.realTimeData.length > 10) {
-          this.realTimeData.splice(0,1);
-          this.chartLabels.splice(0,1);
+          this.realTimeData.splice(0, 1);
+          this.chartLabels.splice(0, 1);
         }
       })
   }
 
+
   ngOnInit() {
 
-    this.userNameObj={
-      "uname":this.user.getLog()
+    this.userNameObj = {
+      "uname": this.user.getLog()
     }
 
-    this.http.post('http://localhost:3000/user-api/confirmed_devices', this.userNameObj)
-        .subscribe((res:Response) =>{
+    this.http.get('http://localhost:3000/user-apis/connected-devices/' + this.user.getLog())
+      .subscribe((res: Response) => {
 
-          console.log(res);
-          var temp=res.json();
-          console.log(temp.docs);
-
-          for(let i=0;i<temp.docs.length;i++){
-            this.location[i]=temp.docs[i];
-          }
-          this.deviceData=temp.docs;
-
-          console.log(this.location);
-          console.log(this.deviceData);
-
-
-
-        })
+        var temp = JSON.parse(JSON.stringify(res));
+        for (let i = 0; i < temp.docs.length; i++) {
+          this.location[i] = temp.docs[i];
+        }
+        this.deviceData = temp.docs;
+      })
   }
-
 }

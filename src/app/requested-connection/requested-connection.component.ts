@@ -53,7 +53,7 @@ export class RequestedConnectionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get("http://localhost:3000/admin-api/requested_conn").subscribe(res=>{
+    this.http.get("http://localhost:3000/admin-apis/requested_conn").subscribe(res=>{
       console.log(res);
       var temp=JSON.parse(JSON.stringify(res));
       console.log(temp);

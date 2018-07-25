@@ -1,7 +1,5 @@
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
 
 
 <h3 style="text-align:center;"><b>Connected Devices</b></h3>
@@ -37,59 +35,16 @@
           <td><button class="btn" data-toggle="collapse" data-target="#demo" id="demo" (click)="showFaAwe(device.deviceId)"><i class="fa fa-caret-square-o-down" aria-hidden="true" style="font-size: 30px"></i></button></td>
         </tr>
         <tr>
-            <td colspan="7">
-            <div *ngIf="showModalData==device.deviceId && showGraph">
-            <div *ngIf="chartData.length" style="width:600px; margin-left:auto; margin-right:auto;">
+        <td colspan="8">
+            <div *ngIf="chartData.length && showModalData==device.deviceId && showGraph" style="width:600px; margin-left:auto; margin-right:auto;">
                 <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
                 </canvas>
             </div>
-            </div>
-
             <div *ngIf="showModal==true && showTabTo==device.deviceId">
-                <div>
                     <img src="/assets/images/water.gif" height="300" width="600">
-                </div>
             </div>
         </td>
         </tr>
       </tbody>
     </table>
 </div>
-
-<!-- <div id="demo" class="collapse">
-    Lorem ipsum dolor text....
-  </div>
-
-  <ng-template *ngIf="showPopUp">
-    <div class="modal-body text-center">
-    <p>Do you want to confirm?</p>
-    <button type="button" class="btn btn-default" 
-    (click)="confirm()">Yes</button>
-    <button type="button" class="btn btn-primary" 
-    (click)="decline()">No</button>
-    </div> -->
-  
-  <!-- <select name="conn" id="conn">
-      <option value='dashboard'>Connections disabled</option>
-      <option value='device-usage'>Connected Devices</option>
-      <option value='requested_conn'>Connection Requests</option>
-      <option value='admin-connections'>Connection List</option>
-  </select> -->
-
-<!-- <div *ngIf="chartData.length" style="width:70%; margin-left:auto; margin-right:auto;">
-    <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
-    </canvas>
-</div> -->
-
-
-  <!-- <div *ngIf="showModal" class="card">
-              <div class="card-body">
-                  <div *ngIf="showTabOn">
-                      <img src="/assets/images/water.gif" height="300" width="660">
-                  </div>
-                  
-                  <div *ngIf="showTabOff">
-                      <img src="/assets/images/stopwater.jpg" height="300" width="660">
-                  </div>
-              </div>
-            </div> -->

@@ -32,7 +32,7 @@ export class LoginFormComponent implements OnInit {
       "password":this.model.pwd
     }
 
-    this.http.post('http://localhost:3000/log/login', this.loginObj)
+    this.http.post('http://localhost:3000/logs/login', this.loginObj)
         .subscribe((res:Response) =>{
           console.log(res);
           var temp=res.json();

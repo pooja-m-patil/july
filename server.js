@@ -64,7 +64,7 @@ app.use(function (req, res, next) {
 
 
 
-app.use('/log',login);
+app.use('/logs',login);
 
 // app.use(function (req,res,next){
 //   console.log("verify token");
@@ -80,9 +80,9 @@ app.use('/log',login);
 //   }
 // })
 
-app.use('/display', route);
-app.use('/admins-api', admin);
-app.use('/user-api',  user);
+app.use('/apis', route);
+app.use('/admin-apis', admin);
+app.use('/user-apis',  user);
 app.use('/watson', watson);
 
 var server = app.listen(3000, function () {
@@ -138,7 +138,7 @@ io.on('connection', (socket) => {
   socket1 = socket;
 })
 
-app.post("/remoteApp", function (req, res) {
+app.post("/devices", function (req, res) {
 
   if (req.body.deviceId) {
     deviceId = req.body.deviceId;
@@ -248,46 +248,38 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
   })
 })
 
-app.post("/stop-conn", function (req, res) {
+app.put("/connections/:deviceId", function (req, res) {
 
-  var dId1=req.body.devId;
-  appClient.publishDeviceCommand("iotbootcamp", dId1, "reboot", "json", { "status": "Stop" });
+  var deviceId=req.params.deviceId;
+  appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Stop" });
 
   for(let i=0;i<allDevUsage.length;i++){
-    if(allDevUsage[i].deviceId==dId1){
+    if(allDevUsage[i].deviceId==deviceId){
       allDevUsage[i].status="Stopped";
       socket1.emit("total device usage", allDevUsage);
     }
   }
 
-  res.send("Device connection stopped successfully");
+  res.json("Device connection stopped successfully");
 });
 
 
-app.post("/restart-conn", function (req, res) {
+app.get("/connections/:deviceId", function (req, res) {
   
-  if(req.body.devId){
-    var did=req.body.devId;
-    console.log(did);
-    appClient.publishDeviceCommand("iotbootcamp", did, "reboot", "json", { "status": "Restart" });
+  if(req.params.deviceId){
+    var deviceId=req.params.deviceId;
+    console.log(deviceId);
+    appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Restart" });
 
     for(let i=0;i<allDevUsage.length;i++){
-      if(allDevUsage[i].deviceId==did){
+      if(allDevUsage[i].deviceId==deviceId){
         allDevUsage[i].status="Running";
         socket1.emit("total device usage", allDevUsage);
-        res.send("Device connection restarted successfully");
+        res.json("Device connection restarted successfully");
       }
     }
   }
 })
 });
-
-app.get("/initarray", function (req, res) {
-  res.send(devicesObj.emit());
-})
-
-
-
-
 
 module.exports = app;

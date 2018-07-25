@@ -49,7 +49,7 @@ export class GraphComponent implements OnInit {
     this.ref = [];
     this.map = [];
     this.selectedAreaItems = [];
-    this.http.get("http://localhost:3000/display/mapping").subscribe(res => {
+    this.http.get("http://localhost:3000/apis/mapping").subscribe(res => {
       var temp1 = JSON.parse(JSON.stringify(res));
       console.log(temp1);
       for (let i = 0, c = 0, m = 0; i < 4; i++) {
@@ -104,7 +104,7 @@ export class GraphComponent implements OnInit {
           "dId": this.selectedAreaItems[a]
         }
 
-      this.http.post("http://localhost:3000/display/graph", this.monthDate).subscribe(res => {
+      this.http.get("http://localhost:3000/apis/graph/"+this.selectedAreaItems[a]+"?date1="+this.date1+"&date2="+this.date2).subscribe(res => {
 
         console.log(res);
         this.totalLength++;
@@ -191,7 +191,7 @@ export class GraphComponent implements OnInit {
   ngOnInit() {
     this.selectedCityItems = [];
 
-    this.http.get("http://localhost:3000/display/cities").subscribe(res => {
+    this.http.get("http://localhost:3000/apis/cities").subscribe(res => {
       var temp = JSON.parse(JSON.stringify(res));
       console.log(temp);
       for (let i = 0; i < 3; i++) {
