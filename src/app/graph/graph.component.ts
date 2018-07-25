@@ -95,21 +95,10 @@ export class GraphComponent implements OnInit {
 
     for (let a = 0; a < this.selectedAreaItems.length; a++) {
 
-      console.log(this.selectedAreaItems[a]);
-      console.log(a);
-      
-        this.monthDate = {
-          "d1": this.date1,
-          "d2": this.date2,
-          "dId": this.selectedAreaItems[a]
-        }
-
       this.http.get("http://localhost:3000/apis/graph/"+this.selectedAreaItems[a]+"?date1="+this.date1+"&date2="+this.date2).subscribe(res => {
 
-        console.log(res);
         this.totalLength++;
         var temp = JSON.parse(JSON.stringify(res));
-        console.log(temp);
         var j=0,t;
 
         
@@ -129,19 +118,9 @@ export class GraphComponent implements OnInit {
 
         }
 
-        
-
         this.date.sort();
-
-        console.log(this.date);
-        console.log(this.totalLength);
-        console.log(this.selectedAreaItems.length);
         if(this.totalLength==this.selectedAreaItems.length){
 
-          console.log(this.dbData[0][0]);
-          console.log(this.dbData);
-          console.log(this.date);
-          
             for(let b=0;b<this.dbData.length;b++){
 
               this.graphLabel[b]=this.dbData[b][0].deviceId;
@@ -154,105 +133,57 @@ export class GraphComponent implements OnInit {
                   }
                 }
             }
-            console.log(this.myarray[b]);
             this.chartData2.push({ data: this.myarray[b], label: this.graphLabel[b] });
             this.status++;
             
-            console.log(this.selectedAreaItems.length);
-            console.log(this.status);
           }
-          console.log(this.dbData);
-          console.log(this.myarray);
         }
       })
      
     }
   }    
 
-    //     for (t = 0; t < temp.length; t++) {
-    //       this.date[t] = temp[t].timestamp;
-
-    //       for (let l = 0; l < temp.length; l++) {
-    //         this.myarray[a][l] = temp[l].usage;
-    //       }
-    //     }
-    //     console.log(this.date)
-    //     console.log(this.myarray[a]);
-    //     this.chartData2.push({ data: this.myarray[a], label: this.selectedAreaItems[a] });
-    //     this.status++;
-    //     console.log(this.selectedAreaItems.length);
-    //     console.log(this.status);
-    //   })
-    // }
-    // console.log(this.myarray);
-      
-
-
   ngOnInit() {
     this.selectedCityItems = [];
 
     this.http.get("http://localhost:3000/apis/cities").subscribe(res => {
       var temp = JSON.parse(JSON.stringify(res));
-      console.log(temp);
       for (let i = 0; i < 3; i++) {
         this.arrcity[i] = temp.rows[i].doc.city;
       }
-      console.log(this.dropdownCityList);
       this.dropdownCityList = this.arrcity
     })
 
-    this.dropdownCitySettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
+    // this.dropdownCitySettings = {
+    //   singleSelection: false,
+    //   idField: 'item_id',
+    //   textField: 'item_text',
+    //   selectAllText: 'Select All',
+    //   unSelectAllText: 'UnSelect All',
+    //   itemsShowLimit: 3,
+    //   allowSearchFilter: true
+    // };
   }
 
   onCitySelect(item) {
-
-    console.log(item);
-    console.log("select" + this.selectedCityItems);
-    console.log("items selected" + item);
     this.mapping();
   }
 
-  onCitySelectAll(items) {
-    console.log(items);
-  }
+  onCitySelectAll(items) {}
 
-  onCityDeSelectAll(items) {
-    console.log(items);
-
-  }
+  onCityDeSelectAll(items) {}
 
   onAreaSelect(item) {
-
-    console.log(item);
-    console.log(this.selectedAreaItems);
-    console.log("items selected" + item);
     this.status = 0;
   }
+
   onAreaDeSelect(item) {
-
-    console.log("Deselect" + item);
-    console.log(this.selectedAreaItems);
     this.status = 0;
-    console.log(this.status);
-    console.log(this.selectedAreaItems.length);
   }
 
-  onAreaSelectAll(items) {
-    console.log(items);
-  }
+  onAreaSelectAll(items) {}
 
-  onAreaDeSelectAll(items) {
-    console.log(items);
-
-  }
+  onAreaDeSelectAll(items) {}
 
 }
 

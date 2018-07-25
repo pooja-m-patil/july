@@ -11,58 +11,28 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 })
 export class RequestedConnectionComponent implements OnInit {
 
-  connRequests=[];
-  deviceObj=[];
-  auth:string;
-  hideAddedDevice:any;
-  deviceId:string;
-  userRegDevices=[];
-  displayDevices=[];
+  connRequests = [];
+  deviceObj = [];
+  auth: string;
+  hideAddedDevice: any;
+  deviceId: string;
+  userRegDevices = [];
+  displayDevices = [];
 
-  constructor(private http: HttpClient,private router:Router,private user:UserService) { 
+  constructor(private http: HttpClient, private router: Router, private user: UserService) {}
 
-  }
-
-  addDevice=function(index,username,locationname,latitude,longitude){
-    
-    console.log(username);
-    console.log(locationname);
-    console.log(latitude);
-    console.log(longitude);
-    
-    this.deviceObj=[
-      {"username":username},{"locationname":locationname},{"latitude":latitude},{"longitude":longitude}
+  addDevice = function (index, username, locationname, latitude, longitude) {
+    this.deviceObj = [
+      { "username": username }, { "locationname": locationname }, { "latitude": latitude }, { "longitude": longitude }
     ];
     this.user.setMapping(this.deviceObj);
     this.router.navigate(['mapping-devices']);
-  //   this.http.post("http://localhost:3000/display/addReq",this.deviceObj).subscribe((res:Response) => 
-  //   {
-  //     console.log(res.json());
-  //     var temp=res.json();
-  //     console.log(temp.results[0].deviceId);
-  //     this.auth=temp;
-  //     this.hideAddedDevice=index;
-  //     console.log(this.hideAddedDevice);
-  //     for(let i=0;i<this.connRequests.length;i++){
-  //       console.log(this.connRequests[i]._id);
-  //       if(this.hideAddedDevice==this.connRequests[i]._id){
-  //         this.connRequests.splice(i);
-  //       }
-  //     }
-  //   })
   }
 
   ngOnInit() {
-    this.http.get("http://localhost:3000/admin-apis/requested_conn").subscribe(res=>{
-      console.log(res);
-      var temp=JSON.parse(JSON.stringify(res));
-      console.log(temp);
-      console.log(temp.docs);
-      this.connRequests=temp.docs;
-      console.log(this.hideAddedDevice);
-      
-      console.log(this.connRequests);
-  })
-
-}
+    this.http.get("http://localhost:3000/admin-apis/requested_conn").subscribe(res => {
+      var temp = JSON.parse(JSON.stringify(res));
+      this.connRequests = temp.docs;
+    })
+  }
 }

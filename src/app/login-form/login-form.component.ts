@@ -1,4 +1,4 @@
-import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { Http, Response, Headers } from '@angular/http';
@@ -12,57 +12,47 @@ import { empty } from 'rxjs/Observer';
   styleUrls: ['./login-form.component.css']
 })
 export class LoginFormComponent implements OnInit {
-  public model=new Model();
-  loginObj:object={};
-  
-  
-  constructor(private router:Router ,private http: Http, private user:UserService) { }
+  public model = new Model();
+  loginObj: object = {};
 
-  ngOnInit() {
-   
-  }
-  
-  loginUser=function(e) {
+
+  constructor(private router: Router, private http: Http, private user: UserService) { }
+
+  ngOnInit() {}
+
+  loginUser = function (e) {
     e.preventDefault();
-    console.log(e);
-    this.model.uname=e.target.elements[0].value;
-    this.model.pwd=e.target.elements[1].value;
-    this.loginObj={
+    this.model.uname = e.target.elements[0].value;
+    this.model.pwd = e.target.elements[1].value;
+    this.loginObj = {
       "username": this.model.uname,
-      "password":this.model.pwd
+      "password": this.model.pwd
     }
 
     this.http.post('http://localhost:3000/logs/login', this.loginObj)
-        .subscribe((res:Response) =>{
-          console.log(res);
-          var temp=res.json();
-          console.log(temp.token);
-          console.log(temp.username);
-          this.user.setToken(temp.token);
-          if(temp.username=="admin@gslab.com"){
-            this.user.setLog(this.model.uname);
-            this.router.navigate(['dashboard']);
-          }
-          else if(temp.token){
-            console.log("user");
-            this.user.setLog(this.model.uname);
-            this.router.navigate(['dashboard']);
-          }
-          else{
-            console.log("Username or Password incorrect. Please try again");
-            this.model.errmsg="Username or Password incorrect. Please try again"
-          }
-          var temp=res['_body']; 
-        
-          console.log("id"+temp);
-          
-         this.model.message="Welcome "+temp;
-          this.model.welmsg=true;
-          console.log(temp);   
-          
-          return res;
-        })
+      .subscribe((res: Response) => {
+        var temp = res.json();
+
+        this.user.setToken(temp.token);
+        if (temp.username == "admin@gslab.com") {
+          this.user.setLog(this.model.uname);
+          this.router.navigate(['dashboard']);
+        }
+        else if (temp.token) {
+          this.user.setLog(this.model.uname);
+          this.router.navigate(['dashboard']);
+        }
+        else {
+          this.model.errmsg = "Username or Password incorrect. Please try again"
+        }
+        var temp = res['_body'];
+
+        this.model.message = "Welcome " + temp;
+        this.model.welmsg = true;
+
+        return res;
+      })
   }
 
-  
+
 }

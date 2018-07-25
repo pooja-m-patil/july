@@ -22,10 +22,6 @@
           <td>{{device.longitude}}</td>
           <td (click)="addDevice(i+1,device.username,device.locationname,device.latitude,device.longitude)"><button>Create Connection</button>
           </td>
-        
-          <!-- <td (click)="deleteDevice(device.deviceId)" id="i" ng-value="myVar"><button type="button" class="btn btn-danger disabled">DELETE</button></td>
-          <td (click)="showAuth(device)"><button type="button" class="btn btn-primary">Show Authentication Token</button></td>
-          <td >{{device['authToken']}}</td> -->
         </tr>
       </tbody>
     </table>

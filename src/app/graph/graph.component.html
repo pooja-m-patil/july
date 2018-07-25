@@ -1,83 +1,51 @@
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<h3 style="text-align:center;">
+  <b>
+    <i class="fa fa-bar-chart" aria-hidden="true"></i> Graph</b>
+</h3>
+<div class="container">
 
-
- <h3 style="text-align:center;"><b><i class="fa fa-bar-chart" aria-hidden="true"></i> Graph</b></h3>
-    <div class="container">
-    
-      <ng-multiselect-dropdown
-      [placeholder]="'Select Cities'"
-      [data]="dropdownCityList"
-      [(ngModel)]="selectedCityItems"
-      [settings]="dropdownCitySettings"
-      (onSelect)="onCitySelect($event)"
-      (onSelectAll)="onCitySelectAll($event)"
-      (onDeSelect)="onCitySelect($event)"
-  >
+  <ng-multiselect-dropdown [placeholder]="'Select Cities'" [data]="dropdownCityList" [(ngModel)]="selectedCityItems" [settings]="dropdownCitySettings"
+    (onSelect)="onCitySelect($event)" (onSelectAll)="onCitySelectAll($event)" (onDeSelect)="onCitySelect($event)">
   </ng-multiselect-dropdown>
   <br>
-  
-  
-  <ng-multiselect-dropdown *ngIf="dropdownAreaList.length"
-      [placeholder]="'Select Devices'"
-      [data]="dropdownAreaList"
-      [(ngModel)]="selectedAreaItems"
-      [settings]="dropdownSettings"
-      (onSelect)="onAreaSelect($event)"
-      (onSelectAll)="onAreaSelectAll($event)"
-      (onDeSelect)="onAreaDeSelect($event)"
-  >
+
+
+  <ng-multiselect-dropdown *ngIf="dropdownAreaList.length" [placeholder]="'Select Devices'" [data]="dropdownAreaList" [(ngModel)]="selectedAreaItems"
+    [settings]="dropdownSettings" (onSelect)="onAreaSelect($event)" (onSelectAll)="onAreaSelectAll($event)" (onDeSelect)="onAreaDeSelect($event)">
   </ng-multiselect-dropdown>
-  
+
   <br>
 
-      <form #event="ngForm" (ngSubmit)="graph(event.value)">
-        <label>Select Date :</label>
-        &nbsp;
-        &nbsp;
-        <input type="date" name="d1" ngModel />
-        &nbsp;
-        <input type="date" name="d2" ngModel />
-        &nbsp;
-        <input type="submit" value="Submit">
-      </form>
-  
-  <br>
+  <form #event="ngForm" (ngSubmit)="graph(event.value)">
+    <label>Select Date :</label>
+    &nbsp; &nbsp;
+    <input type="date" name="d1" ngModel /> &nbsp;
+    <input type="date" name="d2" ngModel /> &nbsp;
+    <input type="submit" value="Submit">
+  </form>
 
+  <br>
 </div>
 
-   
+<div id="ngGraph" *ngIf="status==selectedAreaItems.length && chartData2.length">
 
-    <div id="ngGraph" *ngIf="status==selectedAreaItems.length && chartData2.length">
-      
-      <div style="width: 850px ;margin-left: auto ;margin-right: auto ;">
-          <canvas
-            baseChart
-          [datasets]="chartData2"
-          [labels]="date"
-          [options]="chartOptions"
-          [legend]="true"
-          [chartType]="'line'"
-          (chartClick)="onChartClick($event)">
-        </canvas>
-        </div> 
+  <div style="width: 850px ;margin-left: auto ;margin-right: auto ;">
+    <canvas baseChart [datasets]="chartData2" [labels]="date" [options]="chartOptions" [legend]="true" [chartType]="'line'" (chartClick)="onChartClick($event)">
+    </canvas>
+  </div>
 
- <br>
- <br>
-     
-      <div style="width: 850px ;margin-left: auto ;margin-right: auto ;">
-            <canvas baseChart
-                    [datasets]="chartData2"
-                    [labels]="date"
-                    [options]="ChartOptions"
-                    [legend]="barChartLegend"
-                    [chartType]="'bar'"></canvas>
-        </div>
-        
+  <br>
+  <br>
 
-  
-      <!-- <h3>Pie Chart</h3>
+  <div style="width: 850px ;margin-left: auto ;margin-right: auto ;">
+    <canvas baseChart [datasets]="chartData2" [labels]="date" [options]="ChartOptions" [legend]="barChartLegend" [chartType]="'bar'"></canvas>
+  </div>
+
+
+
+  <!-- <h3>Pie Chart</h3>
       <div>
 
           <div style="display: block" style="width: 50%;">
@@ -91,9 +59,9 @@
           </div>
           </div> -->
 
- 
+
 </div>
-  <!-- <td>
+<!-- <td>
  
     <div style="display: block" style="width: 50%;">
       <canvas baseChart
@@ -116,8 +84,3 @@
                     ></canvas>
       </div>
       </td> -->
-
-
-
-
-

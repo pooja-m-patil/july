@@ -101,7 +101,7 @@ app.delete("/devices/:deviceId", function (request, response) {
   });
 });
 
-app.get("/graph", function (request, response) {
+app.get("/graph/:deviceId", function (request, response) {
 
   var deviceId=request.params.deviceId;
   var date1=request.query.date1;
