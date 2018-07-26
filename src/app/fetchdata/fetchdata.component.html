@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="table-active" *ngFor="let device of model.devices.results; let i=index;">
+        <tr class="table-active" *ngFor="let device of deviceData; let i=index;">
           <td>{{i+1}}</td>
           <td>{{device.deviceId | json}}</td>
           <td>{{device.typeId | json}}</td>

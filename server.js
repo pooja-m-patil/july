@@ -7,7 +7,8 @@ var express1 = require('express-validation');
 var router = express.Router();
 var cors = require('cors');
 var cookieParser=require('cookie-parser');
-var logger=require('morgan');
+//var tracer=require('tracer').colorConsole();
+var morgan=require('morgan')
 var path = require('path'); 
 var socketIo = require('socket.io');
 var watson = require('./src/api_calls/watson_service');
@@ -19,6 +20,8 @@ var admin = require('./src/api_calls/admin');
 const jwt=require('jsonwebtoken');
 var favicon = require('serve-favicon');
 var cors = require('cors');
+var logger = require('./logger').Logger;
+var fs = require('fs');
 
 var status;
 var auth;
@@ -33,25 +36,12 @@ var allDevUsage = [];
 var rejectDevices=[];
 var deviceIdPresent=false;
 var devId;
+var api;
 
 app.use(cors());
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(logger('dev'));
 app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-//app.use(express.static(path.join(__dirname, 'public')));
-
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
 
 
 app.use(function (req, res, next) {
@@ -66,19 +56,22 @@ app.use(function (req, res, next) {
 
 app.use('/logs',login);
 
-// app.use(function (req,res,next){
-//   console.log("verify token");
-//   console.log(req.headers);
-//   var tokenHeader=req.headers['authorization'];
-//   console.log(tokenHeader)
-//   if(tokenHeader!=undefined){
-//     return next();
-//     //return res.json({"token":"valid"});
-//   }else{
-//     console.log("undefined");
-//     return res.json({"token":"invalid"});
-//   }
-// })
+app.use(function (req,res,next){
+  var tokenHeader=req.headers['authorization'];
+
+  //fs.createWriteStream(__dirname + '/access.log', {flags: 'a'}).write(JSON.stringify(tracer.info('fail')));
+  //fs.createWriteStream(__dirname + '/access.log', {flags: 'a'}).write('\n'+JSON.stringify(logger.info('information')));
+
+  if(tokenHeader!=undefined){
+    logger.info('Token is valid');
+    return next();
+  }else{
+    return res.json({"token":"invalid"});
+  }
+})
+
+var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'});
+app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use('/apis', route);
 app.use('/admin-apis', admin);
@@ -138,7 +131,7 @@ io.on('connection', (socket) => {
   socket1 = socket;
 })
 
-app.post("/devices", function (req, res) {
+app.post("/discovery", function (req, res) {
 
   if (req.body.deviceId) {
     deviceId = req.body.deviceId;
@@ -160,18 +153,20 @@ app.post("/devices", function (req, res) {
     }
   }
   else {
-    var uid = req.body.deviceId;
-    dev.devices(uid, function (data) {
-      if (data.bookmark != 'nil') {
+    var deviceId = req.body.deviceId;
+    dev.devices(deviceId, function (data2) {
+      if (data2.bookmark != 'nil') {
         
-        dev.authAvailable(uid, function (data) {
-          console.log(data);
-          if (data.bookmark != 'nil') {
-            res.send({ Authentication_Token: data.docs[0].data.authToken })
+        dev.authAvailable(deviceId, function (data1) {
+          console.log("data1");
+          console.log(data1);
+          if (data1.bookmark != 'nil') {
+            console.log(data1.docs[0].data.authToken);
+            res.send({ Authentication_Token: data1.docs[0].data.authToken })
           }
           else{
           console.log("auth");
-          devicesObj.add(uid);
+          devicesObj.add(deviceId);
           }
         })
 

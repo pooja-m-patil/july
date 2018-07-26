@@ -20,22 +20,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/connections", function (request, response) {
   list.connList(function (data) {
-    response.send(data);
+    response.send({data});
   })
 })
 
-app.get("/requested_conn", function (request, response) {
+app.get("/connection-requests", function (request, response) {
 
   console.log('requested conn');
   conn.getConnections(function (data) {
-    response.send(data);
+    response.send({data});
   });
 })
 
 app.get("/ibm-devices", function (request, response) {
 
   addDev.getIOTDevice(function (data) {
-    response.send(data);
+    response.send({data});
   })
 })
 
@@ -55,12 +55,12 @@ app.post("/connections", function (request, response) {
     if (dId == devId) {
       confirm.confirmUserReq(dId, data, uname, locname, lat, lng, function (data) {
 
-        rev.getRev(lat, lng, function (data) {
+        rev.getRev(lat, lng, function (data1) {
 
           var options = {
             method: 'DELETE',
-            url: auth.DBURL + 'connection_request/' + data._id,
-            qs: { rev: data._rev },
+            url: auth.DBURL + 'connection_request/' + data1._id,
+            qs: { rev: data1._rev },
             headers: auth.DBAUTH
           };
 
@@ -69,7 +69,7 @@ app.post("/connections", function (request, response) {
 
             console.log(body);
           });
-          response.send(data);
+          response.send({data});
         });
       })
     }
@@ -111,7 +111,7 @@ app.patch("/connections", function (request, response) {
         console.log(body);
 
         confirm.confirmUserReq(newDId, data1, uname, locname, lat, lng, function (data) {
-          response.send(data);
+          response.send({data});
         });
       });
     })
@@ -127,7 +127,7 @@ app.patch("/connections", function (request, response) {
 
 app.get('/connected-devices', function (request, response) {
   getDev.userConnDevices(function (data) {
-    response.send(data);
+    response.send({data});
   })
 })
 

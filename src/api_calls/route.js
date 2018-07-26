@@ -38,12 +38,12 @@ app.post("/register", function (request, response) {
   console.log(uname + " " + " " + pass1);
   reg.registerUser(uname, pass1, function (data) {
     console.log(data);
-    response.send(data);
+    response.send({data});
   });
 });
 
 
-app.get("/data/:deviceId", function (request, response) {
+app.get("/token/:deviceId", function (request, response) {
   var deviceId = request.params.deviceId;
   server.getDevicesInfo(deviceId, function (data) {
     response.json(data);
@@ -51,45 +51,46 @@ app.get("/data/:deviceId", function (request, response) {
 });
 
 
-app.post("/adddev", function (request, response) {
+// app.post("/adddev", function (request, response) {
 
-  var devicename = request.body.devicename;
-  var devicetype = request.body.devicetype;
-  var classname = request.body.deviceclass;
-  var subject = request.body.devicedesc;
+//   var devicename = request.body.devicename;
+//   var devicetype = request.body.devicetype;
+//   var classname = request.body.deviceclass;
+//   var subject = request.body.devicedesc;
 
-  console.log(classname + " " + subject);
-  server.regDevice(devicename, devicetype, classname, subject, function (data) {
-    console.log(data.authToken);
-    var deviceId = data.deviceId;
-    mydbiot.insert(data, deviceId, function (err) {
-      if (err) {
-        return console.log('[mydbiot.insert] ', err.message);
-      }
-    });
-    response.send("Device Added successfully. Auth Token is : " + data.authToken);
-  });
-});
+//   console.log(classname + " " + subject);
+//   server.regDevice(devicename, devicetype, classname, subject, function (data) {
+//     console.log(data.authToken);
+//     var deviceId = data.deviceId;
+//     mydbiot.insert(data, deviceId, function (err) {
+//       if (err) {
+//         return console.log('[mydbiot.insert] ', err.message);
+//       }
+//     });
+//     response.send("Device Added successfully. Auth Token is : " + data.authToken);
+//   });
+// });
 
-app.post("/login", function (request, response) {
-  console.log("hello");
+// app.post("/login", function (request, response) {
+//   console.log("hello");
 
-  var uname = request.body.username;
-  var pasw = request.body.password;
+//   var uname = request.body.username;
+//   var pasw = request.body.password;
 
-  server2.getLoginInfo(uname, pasw, function (data) { 
-  console.log("login");
-  console.log(data);
-  response.send(data);
-});
+//   server2.getLoginInfo(uname, pasw, function (data) { 
+//   console.log("login");
+//   console.log(data);
+//   response.send(data);
+// });
 
-});
+// });
 
 app.get("/devices", function (request, response) {
   console.log("fetch data");
   server.getDevices(function (data) {
     console.log(data);
-    response.send(data);
+    var temp=JSON.parse(data);
+    response.send({data:temp.results});
   });
 });
 
@@ -97,31 +98,32 @@ app.get("/devices", function (request, response) {
 app.delete("/devices/:deviceId", function (request, response) {
   var deviceId = request.params.deviceId;
   server.delDevice(deviceId, function (data) {
-    response.send(data);
+    response.send({data});
   });
 });
 
-app.get("/graph/:deviceId", function (request, response) {
+app.get("/graphs/:deviceId", function (request, response) {
 
   var deviceId=request.params.deviceId;
   var date1=request.query.date1;
   var date2=request.query.date2;
 
   server1.getData(date1,date2,deviceId, function (data) {
-    response.send(data);
+    response.send({data});
   });
 })
 
 
-app.get("/mapping", function (request, response) {
+app.get("/mappings", function (request, response) {
   map.getData(function (data) {
-    response.send(data);
+    response.send({data});
+    
   });
 });
 
 app.get("/cities", function (request, response) {
   city.getData(function (data) {
-    response.send(data);
+    response.send({data});
   });
 });
 

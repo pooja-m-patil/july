@@ -1,0 +1,4 @@
+info : Token is valid
+::1 - - [26/Jul/2018:13:55:38 +0000] "GET /apis/devices HTTP/1.1" 304 - "http://localhost:4200/fetchdata" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"
+info : Token is valid
+::1 - - [26/Jul/2018:13:56:02 +0000] "GET /admin-apis/connections HTTP/1.1" 304 - "http://localhost:4200/admin-connections" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36"

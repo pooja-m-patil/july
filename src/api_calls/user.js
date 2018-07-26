@@ -22,7 +22,7 @@ app.post("/connection-requests", function (request, response) {
 
     req.reqDevice(rId,username,locationname,latitude,longitude,function(data){
 
-    response.send(data);
+    response.send({data});
   });
 })
 
@@ -32,7 +32,7 @@ app.get("/connected-devices/:username", function (request, response) {
 
   usrDev.confirmedUserDevices(username,function(data){
 
-  response.send(data);
+  response.send({data});
 });
 })
 // app.post("/requested_conn", function (request, response) {

@@ -3,9 +3,12 @@ var app = express();
 var cfenv = require("cfenv");
 var request = require("request");
 var server2 = require('./login.js');
+//var logger=require('morgan');
+
+//app.use(logger('dev'));
 
 app.post("/login", function (request, response) {
-    console.log("hello");
+   // logger.log("hello");
   
     var uname = request.body.username;
     var pasw = request.body.password;

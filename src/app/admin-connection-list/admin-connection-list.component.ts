@@ -53,18 +53,18 @@ export class AdminConnectionListComponent implements OnInit {
 
     this.showDevices = true;
     this.http.get("http://localhost:3000/admin-apis/ibm-devices").subscribe((res: Response) => {
-      var data = JSON.parse(JSON.stringify(res));
+      var payload = JSON.parse(JSON.stringify(res));
 
-      for (let i = 0; i < data.docs.length; i++) {
-        this.iotDevices[i] = data.docs[i]._id;
+      for (let i = 0; i < payload.data.docs.length; i++) {
+        this.iotDevices[i] = payload.data.docs[i]._id;
       }
 
       this.http.get("http://localhost:3000/admin-apis/connected-devices").subscribe((res: Response) => {
 
         var temp = JSON.parse(JSON.stringify(res));
 
-        for (let i = 0; i < temp.docs.length; i++) {
-          this.userRegDevices[i] = temp.docs[i]._id;
+        for (let i = 0; i < temp.data.docs.length; i++) {
+          this.userRegDevices[i] = temp.data.docs[i]._id;
         }
         for (let i = 0, j = 0; i < this.iotDevices.length; i++) {
           if (!this.userRegDevices.includes(this.iotDevices[i])) {
@@ -102,7 +102,8 @@ export class AdminConnectionListComponent implements OnInit {
     this.confirmObj["devId"] = deviceId;
     this.http.patch("http://localhost:3000/admin-apis/connections", this.confirmObj).subscribe((res: Response) => {
       var temp = JSON.parse(JSON.stringify(res));
-      if (res.ok == true) {
+      console.log(temp);
+      if (temp.data.ok == true) {
         this.ngOnInit();
         this.msg = "Device Successfully Registered";
       }
@@ -114,8 +115,9 @@ export class AdminConnectionListComponent implements OnInit {
     this.connMsg = "";
 
     this.http.get("http://localhost:3000/admin-apis/connections").subscribe(res => {
-      var data = JSON.parse(JSON.stringify(res));
-      this.connList = data.docs;
+      console.log(res);
+      var temp = JSON.parse(JSON.stringify(res));
+      this.connList = temp.data.docs;
     });
   }
 }

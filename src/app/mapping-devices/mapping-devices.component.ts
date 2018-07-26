@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user.service';
 import { Http, Response, Headers } from '@angular/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 //import { } from '@types/googlemaps';
 
 @Component({
@@ -21,7 +22,7 @@ export class MappingDevicesComponent implements OnInit {
   userRegDevices = [];
   displayDevices = [];
 
-  constructor(private user: UserService, private http: Http) {
+  constructor(private user: UserService, private http: HttpClient) {
 
   }
 
@@ -43,7 +44,9 @@ export class MappingDevicesComponent implements OnInit {
     }
 
     this.http.post("http://localhost:3000/admin-apis/connections", this.confirmObj).subscribe((res: Response) => {
-      if (res.ok == true) {
+    var temp=JSON.parse(JSON.stringify(res)); 
+    console.log(temp); 
+    if (temp.data.ok == true) {
         this.msg = "Device Successfully Registered";
 
       }
@@ -58,14 +61,14 @@ export class MappingDevicesComponent implements OnInit {
 
 
     this.http.get("http://localhost:3000/admin-apis/ibm-devices").subscribe((res: Response) => {
-      var temp = res.json();
-      for (let i = 0; i < temp.docs.length; i++) {
-        this.iotDevices[i] = temp.docs[i]._id;
+      var temp = JSON.parse(JSON.stringify(res));
+      for (let i = 0; i < temp.data.docs.length; i++) {
+        this.iotDevices[i] = temp.data.docs[i]._id;
       }
       this.http.get("http://localhost:3000/admin-apis/connected-devices").subscribe((res: Response) => {
-        var temp = res.json();
-        for (let i = 0; i < temp.docs.length; i++) {
-          this.userRegDevices[i] = temp.docs[i]._id;
+        var temp = JSON.parse(JSON.stringify(res));
+        for (let i = 0; i < temp.data.docs.length; i++) {
+          this.userRegDevices[i] = temp.data.docs[i]._id;
         }
         for (let i = 0, j = 0; i < this.iotDevices.length; i++) {
           if (!this.userRegDevices.includes(this.iotDevices[i])) {

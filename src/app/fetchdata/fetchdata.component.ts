@@ -13,6 +13,9 @@ import { InterceptorService } from '../interceptor.service'
 })
 export class FetchdataComponent implements OnInit {
   public model = new Model();
+  deviceData=[];
+
+  
   constructor(private http: HttpClient, private user: UserService) { }
 
 
@@ -34,7 +37,7 @@ export class FetchdataComponent implements OnInit {
   showAuth = function (device) {
     let id = device['deviceId'];
 
-    this.http.get('http://localhost:3000/apis/data/' + id)
+    this.http.get('http://localhost:3000/apis/token/' + id)
       .subscribe(res => {
         console.log(res);
         this.model.Token = id;
@@ -52,8 +55,10 @@ export class FetchdataComponent implements OnInit {
   ngOnInit() {
 
     this.http.get("http://localhost:3000/apis/devices").subscribe(res => {
+      var temp=JSON.parse(JSON.stringify(res));
+      console.log(temp);
       this.model.isFetch = true;
-      this.model.devices = res;
+      this.deviceData = temp.data;
     });
 
   }

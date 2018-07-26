@@ -40,7 +40,7 @@ export class ConnectionRequestComponent implements OnInit {
 
     this.http.post("http://localhost:3000/user-apis/connection-requests", this.productObj).subscribe((res: Response) => {
       var temp = JSON.parse(JSON.stringify(res));
-      if (temp == true) {
+      if (temp.data == true) {
         this.msg = "Request submited successfully";
         this.rId++;
       }

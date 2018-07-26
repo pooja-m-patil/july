@@ -16,4 +16,5 @@ isAdded:boolean=false;
   welmsg:boolean=true;
   welcome:boolean=false;
   errmsg:string;
+  logapi:string;
 }

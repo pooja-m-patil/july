@@ -39,13 +39,15 @@ export class DeviceDiscoveryComponent implements OnInit {
     this.http.post("http://localhost:3000/apis/devices",this.deviceObj).subscribe((res:Response) => 
     {
       this.temp=JSON.parse(JSON.stringify(res));
+      console.log(this.temp);
       this.isAdded=true;
       this.deviceObj=
       {
         "added":this.temp,
         "id":id
       }
-      this.http.post("http://localhost:3000/devices",this.deviceObj).subscribe((res:Response) => {
+      this.http.post("http://localhost:3000/discovery",this.deviceObj).subscribe((res:Response) => {
+        console.log(res);
       })
     })
   }

@@ -49,18 +49,18 @@ export class GraphComponent implements OnInit {
     this.ref = [];
     this.map = [];
     this.selectedAreaItems = [];
-    this.http.get("http://localhost:3000/apis/mapping").subscribe(res => {
+    this.http.get("http://localhost:3000/apis/mappings").subscribe(res => {
       var temp1 = JSON.parse(JSON.stringify(res));
       console.log(temp1);
       for (let i = 0, c = 0, m = 0; i < 4; i++) {
-        var dbcity = temp1.docs[i].city;
+        var dbcity = temp1.data.docs[i].city;
         for (let j = 0; j < this.selectedCityItems.length; j++) {
           if (this.selectedCityItems[j] == dbcity) {
             console.log("db")
             this.iscity = true;
-            this.ref[c] = temp1.docs[i]._id;
+            this.ref[c] = temp1.data.docs[i]._id;
             c++;
-            this.map[m] = temp1.docs[i].mapid;
+            this.map[m] = temp1.data.docs[i].mapid;
             m++;
           }
         }
@@ -95,25 +95,25 @@ export class GraphComponent implements OnInit {
 
     for (let a = 0; a < this.selectedAreaItems.length; a++) {
 
-      this.http.get("http://localhost:3000/apis/graph/"+this.selectedAreaItems[a]+"?date1="+this.date1+"&date2="+this.date2).subscribe(res => {
+      this.http.get("http://localhost:3000/apis/graphs/"+this.selectedAreaItems[a]+"?date1="+this.date1+"&date2="+this.date2).subscribe(res => {
 
         this.totalLength++;
         var temp = JSON.parse(JSON.stringify(res));
         var j=0,t;
 
         
-        this.dbData[this.dbFetch++]=temp;
+        this.dbData[this.dbFetch++]=temp.data;
               
         if(this.date.length){
-          var len=this.date.length+temp.length;
+          var len=this.date.length+temp.data.length;
           for(let i=this.date.length;i<len;i++){
-            this.date[i]=temp[j].timestamp;
+            this.date[i]=temp.data[j].timestamp;
             j++;
           }
         }
         else{
-          for (t = 0; t < temp.length; t++) {
-            this.date[t] = temp[t].timestamp;
+          for (t = 0; t < temp.data.length; t++) {
+            this.date[t] = temp.data[t].timestamp;
           }
 
         }
@@ -149,7 +149,7 @@ export class GraphComponent implements OnInit {
     this.http.get("http://localhost:3000/apis/cities").subscribe(res => {
       var temp = JSON.parse(JSON.stringify(res));
       for (let i = 0; i < 3; i++) {
-        this.arrcity[i] = temp.rows[i].doc.city;
+        this.arrcity[i] = temp.data.rows[i].doc.city;
       }
       this.dropdownCityList = this.arrcity
     })

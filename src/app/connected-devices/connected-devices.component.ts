@@ -73,10 +73,10 @@ export class ConnectedDevicesComponent implements OnInit {
       .subscribe((res: Response) => {
 
         var temp = JSON.parse(JSON.stringify(res));
-        for (let i = 0; i < temp.docs.length; i++) {
-          this.location[i] = temp.docs[i];
+        for (let i = 0; i < temp.data.docs.length; i++) {
+          this.location[i] = temp.data.docs[i];
         }
-        this.deviceData = temp.docs;
+        this.deviceData = temp.data.docs;
       })
   }
 }
