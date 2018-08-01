@@ -1,6 +1,7 @@
 var cfenv = require("cfenv");
 var request = require("request");
 var auth=require("./credentials");
+var resHandler = require('./response-handler.js');
 
 exports.getData=function(callback)
 {
@@ -10,10 +11,10 @@ exports.getData=function(callback)
       body: { selector: { _id: { '$gt': '0' } }, sort: [ { _id: 'asc' } ] },
       json: true };
     
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-    
-      console.log(body);
-      callback(body);
-    });
+      let res = resHandler.restClient(options);
+      res.then((msg)=>{
+        callback(msg)
+      },(error)=>{
+        callback(error);
+    })
 }

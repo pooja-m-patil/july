@@ -1,6 +1,7 @@
 var cfenv = require("cfenv");
 var request = require("request");
 var auth=require("./credentials");
+var resHandler = require('./response-handler.js');
 var nodeRedDb;
 temp: any = {};
 
@@ -26,7 +27,7 @@ exports.getData = function (d1, d2, dId, callback) {
             timestamp:
               {
                 '$gt': d1,
-                '$lt': d2
+                '$lte': d2
               }
           },
         fields: ["deviceId",
@@ -37,11 +38,11 @@ exports.getData = function (d1, d2, dId, callback) {
       },
     json: true
   };
+  let res = resHandler.restClient(options);
+  res.then((msg)=>{
+    callback(msg)
+  },(error)=>{
+    callback(error);
+})
 
-  request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-
-    console.log(body);
-    callback(response.body.docs);
-  });
 }

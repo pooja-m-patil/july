@@ -6,18 +6,18 @@ var request = require("request");
 var express1 = require('express-validation');
 var router = express.Router();
 var cors = require('cors');
-var cookieParser=require('cookie-parser');
+var cookieParser = require('cookie-parser');
 //var tracer=require('tracer').colorConsole();
-var morgan=require('morgan')
-var path = require('path'); 
+var morgan = require('morgan')
+var path = require('path');
 var socketIo = require('socket.io');
 var watson = require('./src/api_calls/watson_service');
 var dev = require('./src/api_calls/devices');
 var route = require('./src/api_calls/route');
-var login=require('./src/api_calls/login-user');
+var login = require('./src/api_calls/login-user');
 var user = require('./src/api_calls/user');
 var admin = require('./src/api_calls/admin');
-const jwt=require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 var favicon = require('serve-favicon');
 var cors = require('cors');
 var logger = require('./logger').Logger;
@@ -33,8 +33,8 @@ var Client = require("ibmiotf");
 var totalUsage = 0;
 var devData = require('./src/admin_calls/deviceDataUsage');
 var allDevUsage = [];
-var rejectDevices=[];
-var deviceIdPresent=false;
+var rejectDevices = [];
+var deviceIdPresent = false;
 var devId;
 var api;
 
@@ -48,39 +48,107 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true); 
+  res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
-
-
-
-app.use('/logs',login);
-
-app.use(function (req,res,next){
-  var tokenHeader=req.headers['authorization'];
-
-  //fs.createWriteStream(__dirname + '/access.log', {flags: 'a'}).write(JSON.stringify(tracer.info('fail')));
-  //fs.createWriteStream(__dirname + '/access.log', {flags: 'a'}).write('\n'+JSON.stringify(logger.info('information')));
-
-  if(tokenHeader!=undefined){
-    logger.info('Token is valid');
-    return next();
-  }else{
-    return res.json({"token":"invalid"});
-  }
-})
-
-var accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'});
-app.use(morgan('combined', {stream: accessLogStream}));
-
-app.use('/apis', route);
-app.use('/admin-apis', admin);
-app.use('/user-apis',  user);
-app.use('/watson', watson);
 
 var server = app.listen(3000, function () {
   console.log("Listening on port:3000");
 });
+
+var io = socketIo(server);
+
+io.on('connection', (socket) => {
+  console.log("A new WebSocket connection has been established");
+  socket1 = socket;
+})
+
+app.post("/discovery", function (req, res) {
+
+  console.log("device discovery");
+  if (req.body.deviceId) {
+    deviceId = req.body.deviceId;
+  }
+  if (req.body.added) {
+    status = true;
+    auth = req.body.added;
+  }
+  if (req.body.id) {
+    temp = req.body.id;
+  }
+
+  if (status) {
+    if (temp == deviceId) {
+      res.send({ Authentication_Token: auth });
+    }
+    else {
+      res.send("");
+    }
+  }
+  else {
+    var deviceId = req.body.deviceId;
+    dev.devices(deviceId, function (data2) {
+      if (data2.bookmark != 'nil') {
+        dev.authAvailable(deviceId, function (data1) {
+          if (data1.data.bookmark != 'nil') {
+            res.send({ Authentication_Token: data1.data.docs[0].data.authToken })
+          }
+          else {
+            console.log("nil");
+            devicesObj.add(deviceId);
+          }
+        })
+      }
+      else {
+        res.send({ Message: "Not valid device" });
+        return;
+      }
+    });
+  }
+})
+
+app.use('/logs', login);
+
+app.use(function (req, res, next) {
+
+  const getLoggerForStatusCode = (statusCode) => {
+    if (statusCode >= 500) {
+      logger.error(`${new Date().toISOString()},${req.method} ${req.originalUrl}, ${res.statusCode}, Server Error`);
+    }
+    else if (statusCode >= 400) {
+      logger.warn(`${new Date().toISOString()},${req.method} ${req.originalUrl}, ${res.statusCode}, Client Error`);
+    }
+    else if (statusCode >= 300) {
+      logger.debug(`${new Date().toISOString()},${req.method} ${req.originalUrl}, ${res.statusCode}, Unmodified`);
+    }
+    else if (statusCode == 200) {
+      logger.info(`${new Date().toISOString()},${req.method} ${req.originalUrl}, ${res.statusCode}, Ok`);
+    }
+  }
+
+  const msg = getLoggerForStatusCode(res.statusCode);
+
+  var tokenHeader = req.headers['authorization'];
+  var decodeToken = jwt.decode(tokenHeader, 'secretkey');
+
+  if (tokenHeader != undefined) {
+    if (decodeToken.expiresIn >= Date.now()) {
+      next();
+    }
+    else {
+      res.json({ "token": "invalid" });
+    }
+  }
+})
+
+// var accessLogStream = fs.createWriteStream('./access.log', {flags: 'a'});
+// app.use(morgan('common', {stream: accessLogStream}));
+
+app.use('/apis', route);
+app.use('/admin-apis', admin);
+app.use('/user-apis', user);
+app.use('/watson', watson);
+
 
 devicesObj = {
   devArray: [],
@@ -124,61 +192,6 @@ devicesObj = {
   }
 }
 
-var io = socketIo(server);
-
-io.on('connection', (socket) => {
-  console.log("A new WebSocket connection has been established");
-  socket1 = socket;
-})
-
-app.post("/discovery", function (req, res) {
-
-  if (req.body.deviceId) {
-    deviceId = req.body.deviceId;
-  }
-  if (req.body.added) {
-    status = true;
-    auth = req.body.added;
-  }
-  if (req.body.id) {
-    temp = req.body.id;
-  }
-
-  if (status) {
-    if (temp == deviceId) {
-      res.send({ Authentication_Token: auth });
-    }
-    else {
-      res.send("");
-    }
-  }
-  else {
-    var deviceId = req.body.deviceId;
-    dev.devices(deviceId, function (data2) {
-      if (data2.bookmark != 'nil') {
-        
-        dev.authAvailable(deviceId, function (data1) {
-          console.log("data1");
-          console.log(data1);
-          if (data1.bookmark != 'nil') {
-            console.log(data1.docs[0].data.authToken);
-            res.send({ Authentication_Token: data1.docs[0].data.authToken })
-          }
-          else{
-          console.log("auth");
-          devicesObj.add(deviceId);
-          }
-        })
-
-      }
-      else {
-        res.send({ Message: "Not valid device" });
-        return;
-      }
-    });
-  }
-})
-
 
 var appClientConfig = {
   "org": 'tgacg8',
@@ -193,7 +206,7 @@ var appClient = new Client.IotfApplication(appClientConfig);
 appClient.connect();
 
 appClient.on("connect", function () {
-  allDevUsage=[];
+  allDevUsage = [];
   appClient.subscribeToDeviceEvents("+", '+', "status");
 });
 
@@ -201,80 +214,75 @@ appClient.on("deviceEvent", function (deviceType, deviceId, eventType, format, p
 
   var temp = JSON.parse(payload);
   devId = temp.d.deviceId;
-  var realTimeData=temp.d.usage;
-  var timeStamp=temp.d.time;
-  
-   devData.insertDataIntoDatabase(temp.d,function(data){
-   });
-  
-   console.log("get dev data"+devId);
-   devData.getDeviceData(devId, function (data2) 
-   {
-      deviceIdPresent=false;
-      totalUsage = 0;
-  
-      for (let i = 0; i < data2.docs.length; i++) {
-        totalUsage = totalUsage + data2.docs[i].usage;
-      }
+  var realTimeData = temp.d.usage;
+  var timeStamp = temp.d.time;
 
-      devData.getUserName(devId, function(data){
-        if(data.bookmark!='nil'){
-        var uname=data.docs[0].username;
-     
-    if (allDevUsage.length) {
+  devData.insertDataIntoDatabase(temp.d, function (data) {
+  });
+
+  devData.getDeviceData(devId, function (data2) {
+    deviceIdPresent = false;
+    totalUsage = 0;
+
+    for (let i = 0; i < data2.docs.length; i++) {
+      totalUsage = totalUsage + data2.docs[i].usage;
+    }
+
+    devData.getUserName(devId, function (data) {
+      if (data.bookmark != 'nil') {
+        var uname = data.docs[0].username;
+
+        if (allDevUsage.length) {
+          for (let i = 0; i < allDevUsage.length; i++) {
+
+            if (allDevUsage[i].deviceId == devId) {
+              allDevUsage[i].totalusage = totalUsage;
+              allDevUsage[i].currentusage = realTimeData;
+              deviceIdPresent = true;
+            }
+          }
+          if (deviceIdPresent == false) {
+            allDevUsage.push({ "uname": uname, "deviceId": devId, "currentusage": realTimeData, "totalusage": totalUsage, "timestamp": timeStamp, "status": "Running" });
+          }
+        }
+        else {
+          allDevUsage.push({ "uname": uname, "deviceId": devId, "currentusage": realTimeData, "totalusage": totalUsage, "timestamp": timeStamp, "status": "Running" });
+        }
+
+        socket1.emit("total device usage", allDevUsage);
+      }
+    })
+  })
+
+  app.put("/connections/:deviceId", function (req, res) {
+
+    var deviceId = req.params.deviceId;
+    appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Stop" });
+
+    for (let i = 0; i < allDevUsage.length; i++) {
+      if (allDevUsage[i].deviceId == deviceId) {
+        allDevUsage[i].status = "Stopped";
+        socket1.emit("total device usage", allDevUsage);
+      }
+    }
+    res.json("Device connection stopped successfully");
+  });
+
+
+  app.get("/connections/:deviceId", function (req, res) {
+    if (req.params.deviceId) {
+      var deviceId = req.params.deviceId;
+      appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Restart" });
+
       for (let i = 0; i < allDevUsage.length; i++) {
-       
-        if (allDevUsage[i].deviceId == devId) {
-          allDevUsage[i].totalusage = totalUsage;
-          allDevUsage[i].currentusage=realTimeData;
-          deviceIdPresent=true;
+        if (allDevUsage[i].deviceId == deviceId) {
+          allDevUsage[i].status = "Running";
+          socket1.emit("total device usage", allDevUsage);
+          res.json("Device connection restarted successfully");
         }
       }
-      if(deviceIdPresent==false){
-        allDevUsage.push({ "uname":uname, "deviceId": devId, "currentusage":realTimeData, "totalusage": totalUsage, "timestamp":timeStamp, "status":"Running" });
-      }
     }
-    else {
-      allDevUsage.push({ "uname":uname, "deviceId": devId, "currentusage":realTimeData, "totalusage": totalUsage, "timestamp":timeStamp, "status":"Running" });
-    }
-    
-    socket1.emit("total device usage", allDevUsage);
-  }
   })
-})
-
-app.put("/connections/:deviceId", function (req, res) {
-
-  var deviceId=req.params.deviceId;
-  appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Stop" });
-
-  for(let i=0;i<allDevUsage.length;i++){
-    if(allDevUsage[i].deviceId==deviceId){
-      allDevUsage[i].status="Stopped";
-      socket1.emit("total device usage", allDevUsage);
-    }
-  }
-
-  res.json("Device connection stopped successfully");
-});
-
-
-app.get("/connections/:deviceId", function (req, res) {
-  
-  if(req.params.deviceId){
-    var deviceId=req.params.deviceId;
-    console.log(deviceId);
-    appClient.publishDeviceCommand("iotbootcamp", deviceId, "reboot", "json", { "status": "Restart" });
-
-    for(let i=0;i<allDevUsage.length;i++){
-      if(allDevUsage[i].deviceId==deviceId){
-        allDevUsage[i].status="Running";
-        socket1.emit("total device usage", allDevUsage);
-        res.json("Device connection restarted successfully");
-      }
-    }
-  }
-})
 });
 
 module.exports = app;

@@ -54,14 +54,16 @@ export class AdminConnectionListComponent implements OnInit {
     this.showDevices = true;
     this.http.get("http://localhost:3000/admin-apis/ibm-devices").subscribe((res: Response) => {
       var payload = JSON.parse(JSON.stringify(res));
+      console.log(payload);
 
       for (let i = 0; i < payload.data.docs.length; i++) {
         this.iotDevices[i] = payload.data.docs[i]._id;
       }
 
-      this.http.get("http://localhost:3000/admin-apis/connected-devices").subscribe((res: Response) => {
+      this.http.get("http://localhost:3000/admin-apis/user-devices").subscribe((res: Response) => {
 
         var temp = JSON.parse(JSON.stringify(res));
+        console.log(temp);
 
         for (let i = 0; i < temp.data.docs.length; i++) {
           this.userRegDevices[i] = temp.data.docs[i]._id;

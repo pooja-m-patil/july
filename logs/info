@@ -1,0 +1,135 @@
+info : [undefined] GET /admin-apis/user-connections
+info : [undefined] GET /apis/devices
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : Token is invalid
+info : [undefined] GET /admin-apis/user-connections
+info : 200 undefined; 0b sent
+info : [undefined] GET /apis/devices
+info : 200 undefined; 0b sent
+info : Token is invalid
+info : [undefined] GET /apis/devices
+info : 200 undefined
+info : [undefined] GET /admin-apis/connections
+info : 200 undefined
+info : 2018-07-30T11:32:47.628Z
+info : [undefined] GET /apis/devices
+info : 200 undefined
+info : 2018-07-30T11:33:30.223Z
+info : Token is invalid
+info : [undefined] GET /watson/assistants
+info : 200 undefined
+info : 2018-07-30T12:25:52.383Z
+info : [undefined] GET /apis/cities
+info : 200 undefined
+info : 2018-07-30T12:25:55.690Z
+info : [undefined] GET /apis/devices
+info : 200 undefined
+info : 2018-07-30T12:26:16.872Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : 200 undefined
+info : 2018-07-30T12:31:46.481Z
+info : [undefined] GET /apis/devices
+info : 200 undefined
+info : 2018-07-30T12:32:04.746Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/user-connections
+info : 200 undefined
+info : 2018-07-30T12:32:55.183Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : 200 undefined
+info : 2018-07-30T12:33:01.155Z
+info : Token is invalid
+info : [undefined] GET /apis/cities
+info : Ok
+info : [undefined] GET /apis/devices
+info : Ok
+info : 2018-07-30T12:35:26.633Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : Ok
+info : 2018-07-30T12:36:19.992Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/user-connections
+info : Ok
+info : 2018-07-30T12:37:47.376Z
+info : [undefined] GET /apis/devices
+info : Ok
+info : 2018-07-30T12:38:04.920Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : [undefined] GET /apis/devices
+info : [undefined] GET /admin-apis/user-connections
+info : 2018-07-30T12:41:18.576Z
+info : Token is invalid
+info : [undefined] GET /admin-apis/connections
+info : 2018-07-30T12:41:21.262Z
+info : Token is invalid
+info : 2018-07-30T12:44:06.940Z
+info : 2018-07-30T12:44:24.261Z
+info : Token is invalid
+info : new Date().toISOString(),GET /admin-apis/connections, res.statusCode, msg.status
+info : Token is invalid
+info : 2018-07-30T12:45:59.763Z
+info : Token is invalid
+info : 2018-07-30T12:47:55.149Z,GET /admin-apis/user-connections, 200, ok
+info : Token is invalid
+info : 2018-07-30T12:47:56.435Z,GET /admin-apis/connections, 200, ok
+info : Token is invalid
+info : 2018-07-30T12:56:39.195Z,GET /admin-apis/user-connections, 200, undefined
+info : 2018-07-30T12:56:40.449Z,GET /admin-apis/connections, 200, undefined
+info : 2018-07-30T12:57:19.659Z,GET /apis/devices, 200, Ok
+info : 2018-07-30T12:57:36.306Z,GET /apis/devices, 200, Ok
+info : 2018-07-30T13:22:08.965Z,GET /admin-apis/user-connections, 200, Ok
+info : 2018-07-30T13:22:25.384Z,GET /apis/devices, 200, Ok
+info : 2018-07-30T13:23:38.435Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T05:01:37.196Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T05:01:40.015Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T05:02:08.982Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T05:06:24.630Z,GET /apis/cities, 200, Ok
+info : 2018-07-31T05:45:54.793Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T05:46:14.892Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:32:58.961Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:33:23.514Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:33:27.395Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:40:30.798Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:40:30.934Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:40:55.215Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:41:12.329Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:41:59.770Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:42:03.336Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:42:06.885Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:42:11.697Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:42:57.810Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:43:32.435Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:43:56.439Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:44:36.362Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:45:10.007Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:47:06.584Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:47:18.053Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:48:13.772Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:48:20.460Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:48:46.024Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:49:14.710Z,GET /admin-apis/user-connections, 200, Ok
+info : 2018-07-31T06:49:34.833Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:49:52.368Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:49:52.480Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:50:38.026Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:50:38.140Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:51:58.083Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:51:58.165Z,GET /admin-apis/connections, 200, Ok
+info : 2018-07-31T06:52:10.973Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:53:04.717Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:53:04.806Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:53:23.403Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:53:23.490Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:53:28.458Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:53:28.487Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:55:18.114Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:55:18.227Z,GET /apis/devices, 200, Ok
+info : 2018-07-31T06:56:03.203Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:56:23.564Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:56:31.116Z,GET /watson/assistants, 200, Ok
+info : 2018-07-31T06:58:14.909Z,GET /watson/assistants, 200, Ok

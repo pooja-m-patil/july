@@ -1,5 +1,4 @@
-var express = require("express");
-var app = express();
+var app = require('./route');
 var cfenv = require("cfenv");
 var request = require("request");
 var bodyParser = require('body-parser');
@@ -11,7 +10,8 @@ var usrDev=require('../user_calls/userDevices')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/connection-requests", function (request, response) {
+//Requesting for new connection.
+app.post("/user-connections", function (request, response) {
     
     var rId=request.body.rId;
     var username=request.body.username;
@@ -26,7 +26,8 @@ app.post("/connection-requests", function (request, response) {
   });
 })
 
-app.get("/connected-devices/:username", function (request, response) {
+//Fetching connections for user.
+app.get("/admin-connections/:username", function (request, response) {
     
   var username=request.params.username;
 
@@ -34,7 +35,9 @@ app.get("/connected-devices/:username", function (request, response) {
 
   response.send({data});
 });
-})
+});
+
+
 // app.post("/requested_conn", function (request, response) {
     
 //   console.log('requested conn');

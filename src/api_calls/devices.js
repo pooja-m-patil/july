@@ -1,6 +1,7 @@
 var cfenv = require("cfenv");
 var request = require("request");
 var auth=require("./credentials");
+var resHandler = require('./response-handler.js');
 
 
 exports.devices = function (dev, callback) {
@@ -19,13 +20,12 @@ exports.devices = function (dev, callback) {
     json: true
   };
 
-  request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-
-    //console.log(body);
-    // console.log(body.bookmark);
-    callback(body);
-  });
+  let res = resHandler.restClient(options);
+    res.then((msg)=>{
+      callback(msg)
+    },(error)=>{
+      callback(error);
+  })
 
 }
 
@@ -41,18 +41,10 @@ exports.authAvailable = function (dev, callback) {
      sort: [ { _id: 'asc' } ] },
   json: true };
 
-request(options, function (error, response, body) {
-  if (error) throw new Error(error);
-
-  console.log("body");
-  console.log(body);
-  //console.log(body.docs[0].data.authToken);
-  
-  //var temp=JSON.parse(body);
-  //console.log(temp);
-  //console.log(temp.docs[0]);
-  callback(body);
-});
-
-
+  let res = resHandler.restClient(options);
+  res.then((msg)=>{
+    callback(msg)
+  },(error)=>{
+    callback(error);
+})
 }

@@ -5,6 +5,7 @@ import { UserService } from '../user.service';
 import { Http, Response, Headers } from '@angular/http';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../data.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-navbar',
@@ -30,7 +31,7 @@ export class NavbarComponent implements OnInit {
   stockQuote: number;
   sub: Subscription;
 
-  constructor(private http: Http, private router: Router, private user: UserService, private dataService: DataService) {
+  constructor(private http: HttpClient, private router: Router, private user: UserService, private dataService: DataService) {
 
     this.model.isFetch = false;
   }
@@ -63,6 +64,7 @@ export class NavbarComponent implements OnInit {
     this.msg = e.target.elements[0].value;
     this.self = true;
     this.pushData();
+    console.log(this.msg);
     this.msgObj = {
       "msg": this.msg
     }
@@ -72,20 +74,24 @@ export class NavbarComponent implements OnInit {
 
         this.self = false;
         var response = JSON.parse(JSON.stringify(res));
-        var temp = response['_body'];
+        console.log(response);
+        var temp = response.data;
         if (temp == 'Error') {
 
           this.http.post('http://localhost:3000/watson/discovery', this.msgObj)
             .subscribe((res: Response) => {
-              var temp = res.json();
-              if (temp.results[0]) {
+              console.log(res);
+              var temp = JSON.parse(JSON.stringify(res));
+              console.log(temp);
+              if (temp.data.results[0]) {
                 this.msg = 'Sorry. Cannot recognize the input. Is this what you wanted to find?';
                 this.self = false;
                 this.pushData();
-                var change = temp.results[0].highlight.text.toString();
+                var change = temp.data.results[0].highlight.text[0].toString();
                 //var text = $(content).text();
                 //this.msg=change.match('/<{1}\/{0,1}\w+>{1}/');
                 this.msg = change.replace(/<[^>]*>/g, '');
+                console.log(this.msg);
                 this.self = false;
                 this.pushData();
               }
@@ -119,13 +125,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
 
-    this.user.getCount();
-
     this.http.get('http://localhost:3000/watson/assistants')
       .subscribe((res: Response) => {
-
+        console.log("res");
+        console.log(res);
         var temp = JSON.parse(JSON.stringify(res));
-        this.msg = temp['_body'];
+        this.msg = temp.data;
         this.pushData();
       })
   }

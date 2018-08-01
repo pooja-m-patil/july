@@ -69,7 +69,7 @@ export class ConnectedDevicesComponent implements OnInit {
       "uname": this.user.getLog()
     }
 
-    this.http.get('http://localhost:3000/user-apis/connected-devices/' + this.user.getLog())
+    this.http.get('http://localhost:3000/user-apis/admin-connections/' + this.user.getLog())
       .subscribe((res: Response) => {
 
         var temp = JSON.parse(JSON.stringify(res));

@@ -16,13 +16,34 @@
               <a class="current" routerLink="/dashboard">Home</a>
             </li>
 
-            <li>
+            <!-- <li>
               <div>
                 <select class="my-select col s12" #select (change)="Navigate(select.value)" id="select" style="width: 2.5cm">
                   <option value='dashboard' disabled selected>Devices</option>
                   <option value='fetchdata' onchange="fetchdata">Device List</option>
                   <option value='devicediscovery'>Device Discovery</option>
                 </select>
+              </div>
+            </li> -->
+
+            <li>
+              <div class="dropdown">
+                <button class="dropbtn">Devices</button>
+                <div class="dropdown-content">
+                  <a routerLink="/fetchdata">Device List</a>
+                  <a routerLink="/devicediscovery">Device Discovery</a>
+                </div>
+              </div>
+            </li>
+
+            <li>
+              <div class="dropdown">
+                <button class="dropbtn">Connections</button>
+                <div class="dropdown-content">
+                  <a routerLink="/device-usage">Connected Devices</a>
+                  <a routerLink="/requested_conn">Connection Requests</a>
+                  <a routerLink="/admin-connections">Connection List</a>
+                </div>
               </div>
             </li>
 
@@ -34,7 +55,7 @@
                 <option value='admin-connections'>Connection List</option>
             </select> -->
 
-            <li>
+            <!-- <li>
               <div>
                 <select #connId (change)="Navigate(connId.value)" style="width: 3.5cm">
                   <option value='dashboard' disabled selected>Connections</option>
@@ -43,7 +64,7 @@
                   <option value='admin-connections'>Connection List</option>
                 </select>
               </div>
-            </li>
+            </li> -->
 
             <li>
               <a routerLink="/graph">Graph</a>
@@ -53,13 +74,13 @@
               <a routerLink="/admin-connections">Usage</a>
             </li> -->
 
-            <table border=1 *ngIf="user.returnCount()==true">
+            <!-- <table border=1 *ngIf="user.returnCount()==true">
               <tr>
                 <td background-color="white">
                   <font color="white">Available Devices: {{user.getCount()}}</font>
                 </td>
               </tr>
-            </table>
+            </table> -->
           </ul>
         </div>
 

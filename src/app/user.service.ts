@@ -21,20 +21,6 @@ export class UserService {
     this.key = '';
     this.username = 'admin';
     this.count = 0;
-
-    
-
-
-  }
-
-  setUserLoggedIn() {
-    this.isUserLoggedIn = true;
-
-  }
-
-  getuserLoggedin() {
-    return this.isUserLoggedIn;
-
   }
 
   setLog(uname) {
@@ -52,11 +38,11 @@ export class UserService {
     console.log("logout");
     return localStorage.removeItem('uname');
 
-  } 
+  }
 
   setToken(token) {
     //this.isUserLoggedIn=true;
-    localStorage.setItem('token',token);
+    localStorage.setItem('token', token);
   }
 
   getToken() {
@@ -69,42 +55,7 @@ export class UserService {
     console.log("logout");
     return localStorage.removeItem('token');
 
-  } 
-
-
-  setHideFetch() {
-    this.ishide = false;
   }
-
-  getHideFetch() {
-    return this.ishide;
-  }
-
-  // setWelcome(uname) {
-  //   localStorage.setItem(this.username, uname);
-  // }
-
-  // getWelcome() {
-  //   return localStorage.getItem(this.username);
-  // }
-
-  setCount() {
-    this.count++;
-  }
-
-  getCount() {
-    return this.count;
-  }
-
-  resetCount() {
-    this.showCount = false;
-    this.count = 0;
-  }
-
-  settingCount() {
-    this.showCount = true;
-  }
-
   setMapping(obj) {
     this.mapObj = obj;
   }
@@ -113,9 +64,4 @@ export class UserService {
     return this.mapObj;
 
   }
-
-  returnCount() {
-    return this.showCount;
-  }
-
 }

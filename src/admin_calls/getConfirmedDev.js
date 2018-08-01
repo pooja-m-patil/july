@@ -17,6 +17,7 @@ exports.userConnDevices=function(callback){
   request(options, function (error, response, body) {
     if (error) throw new Error(error);
   
+    console.log("devices list");
     console.log(body);
     callback(body);
   }); 

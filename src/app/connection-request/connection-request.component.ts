@@ -38,7 +38,7 @@ export class ConnectionRequestComponent implements OnInit {
       "longitude": this.longitude
     }
 
-    this.http.post("http://localhost:3000/user-apis/connection-requests", this.productObj).subscribe((res: Response) => {
+    this.http.post("http://localhost:3000/user-apis/user-connections", this.productObj).subscribe((res: Response) => {
       var temp = JSON.parse(JSON.stringify(res));
       if (temp.data == true) {
         this.msg = "Request submited successfully";

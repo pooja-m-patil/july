@@ -3,35 +3,27 @@ var app = express();
 var cfenv = require("cfenv");
 var request = require("request");
 var express1 = require('express-validation');
-var server = require('./functions.js');
+var function1 = require('./functions.js');
 var server2 = require('./login.js');
 var multipart = require('connect-multiparty');
 var bodyParser = require('body-parser');
-var server1 = require('./graphfunction');
+var function2 = require('./graphfunction');
 //var disc=require('./discovery.js');
 var map = require('./map.js');
 var city = require('../city.js');
 var reg = require('./register.js');
-var type = require('./devicetypes');
-const jwt=require('jsonwebtoken');
+var promises=require("promises")
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(express.bodyParser());
 
-
-// app.use(function (req, res, next) {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
-//   next();
-// });
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
 
+
+//Registratiion for new user.
 app.post("/register", function (request, response) {
   var uname = request.body.email;
   var pass1 = request.body.pass1;
@@ -42,102 +34,67 @@ app.post("/register", function (request, response) {
   });
 });
 
-
-app.get("/token/:deviceId", function (request, response) {
+//Authentication token for selected device Id.
+app.get("/auth-tokens/:deviceId", function (request, response) {
   var deviceId = request.params.deviceId;
-  server.getDevicesInfo(deviceId, function (data) {
+  function1.getDevicesInfo(deviceId, function (data) {
     response.json(data);
   });
 });
 
-
-// app.post("/adddev", function (request, response) {
-
-//   var devicename = request.body.devicename;
-//   var devicetype = request.body.devicetype;
-//   var classname = request.body.deviceclass;
-//   var subject = request.body.devicedesc;
-
-//   console.log(classname + " " + subject);
-//   server.regDevice(devicename, devicetype, classname, subject, function (data) {
-//     console.log(data.authToken);
-//     var deviceId = data.deviceId;
-//     mydbiot.insert(data, deviceId, function (err) {
-//       if (err) {
-//         return console.log('[mydbiot.insert] ', err.message);
-//       }
-//     });
-//     response.send("Device Added successfully. Auth Token is : " + data.authToken);
-//   });
-// });
-
-// app.post("/login", function (request, response) {
-//   console.log("hello");
-
-//   var uname = request.body.username;
-//   var pasw = request.body.password;
-
-//   server2.getLoginInfo(uname, pasw, function (data) { 
-//   console.log("login");
-//   console.log(data);
-//   response.send(data);
-// });
-
-// });
-
+//Fetching all devices from IBM IOT platform.
 app.get("/devices", function (request, response) {
   console.log("fetch data");
-  server.getDevices(function (data) {
-    console.log(data);
-    var temp=JSON.parse(data);
-    response.send({data:temp.results});
+  function1.getDevices(function (data) {
+    response.send(data);
   });
 });
 
 //Delete device from IBM IOT platform
 app.delete("/devices/:deviceId", function (request, response) {
   var deviceId = request.params.deviceId;
-  server.delDevice(deviceId, function (data) {
+  function1.delDevice(deviceId, function (data) {
     response.send({data});
   });
 });
 
+//Fetching information of devices for generating graphs.
 app.get("/graphs/:deviceId", function (request, response) {
 
   var deviceId=request.params.deviceId;
   var date1=request.query.date1;
   var date2=request.query.date2;
 
-  server1.getData(date1,date2,deviceId, function (data) {
-    response.send({data});
+  function2.getData(date1,date2,deviceId, function (data) {
+    response.send(data);
   });
 })
 
-
+//Displaying all devices present in selected location.
 app.get("/mappings", function (request, response) {
   map.getData(function (data) {
     response.send({data});
-    
   });
 });
 
+//Showing all cities where devices are allocated.
 app.get("/cities", function (request, response) {
   city.getData(function (data) {
     response.send({data});
   });
 });
 
-
+//Adding a new device on IOT platform and Cloudant db.
 app.post("/devices", function (request, response) {
 
   var devicename = request.body.devicename;
 
-  server.addDevice(devicename, function (data) {
+  function1.addDevice(devicename, function (data) {
     console.log(data.authToken);
     var deviceId = data.deviceId;
     console.log(data);
 
-    server.addToDb(devicename, data, function (data) {
+    function1.addToDb(devicename, data, function (data) {
       console.log(data);
     })
 
@@ -149,5 +106,10 @@ app.post("/devices", function (request, response) {
     }
   });
 });
+
+
+// errHandler.getStatusCode().then((msg)=>{
+//   console.log(msg); 
+//  });
 
 module.exports = app;

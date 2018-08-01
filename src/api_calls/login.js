@@ -10,10 +10,6 @@ var auth=require("./credentials");
 
 exports.getLoginInfo=function(uname,pass,callback)
 {
-  console.log("function");
-
-  var request = require("request");
-
   var options = { method: 'POST',
   url: auth.DBURL+'register/_find',
   headers:auth.DBAUTH,
@@ -39,9 +35,8 @@ exports.getLoginInfo=function(uname,pass,callback)
     
     let status=bcrypt.compareSync(pass,pwd);
     if(status){
-      console.log("true");
-      jwt.sign(body.docs[0]._id,'secretkey',(err,token)=>{
-        callback({username:body.docs[0]._id,token});
+      jwt.sign({emailId:body.docs[0]._id,expiresIn:Date.now()+300000000},'secretkey',(err,token)=>{
+        callback({token:token});
       })
     }
     else{

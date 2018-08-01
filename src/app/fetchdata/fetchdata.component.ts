@@ -14,14 +14,12 @@ import { InterceptorService } from '../interceptor.service'
 export class FetchdataComponent implements OnInit {
   public model = new Model();
   deviceData=[];
-
+  errMsg:string;
   
   constructor(private http: HttpClient, private user: UserService) { }
 
-
   //Delete device from IBM IOT platform
   deleteDevice = function (id) {
-
     if (confirm("Are you sure?")) {
       this.http.delete('http://localhost:3000/apis/devices/' + id)
         .subscribe((res: Response) => {
@@ -36,30 +34,28 @@ export class FetchdataComponent implements OnInit {
   //Show Auth token..
   showAuth = function (device) {
     let id = device['deviceId'];
-
-    this.http.get('http://localhost:3000/apis/token/' + id)
+    this.http.get('http://localhost:3000/apis/auth-tokens/' + id)
       .subscribe(res => {
-        console.log(res);
         this.model.Token = id;
-        device.authToken = res;
-        console.log(res);
+        device.authToken = res.data.docs[0].data.authToken;
         return res;
       })
   }
 
-
-  graph = function () {
-    this.router.navigate(['graph']);
-  }
-
   ngOnInit() {
-
     this.http.get("http://localhost:3000/apis/devices").subscribe(res => {
+      console.log(res);
       var temp=JSON.parse(JSON.stringify(res));
       console.log(temp);
+     if(temp.Error){
+       this.errMsg=temp.Error;
+       console.log("Error");
+     }
+     else{
+      var deviceInfo=JSON.parse(temp.data);
       this.model.isFetch = true;
-      this.deviceData = temp.data;
+      this.deviceData = deviceInfo.results
+     }
     });
-
   }
 }

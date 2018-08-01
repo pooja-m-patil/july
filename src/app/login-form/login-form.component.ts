@@ -14,6 +14,7 @@ import { empty } from 'rxjs/Observer';
 export class LoginFormComponent implements OnInit {
   public model = new Model();
   loginObj: object = {};
+  tokenObj:object;
 
 
   constructor(private router: Router, private http: Http, private user: UserService) { }
@@ -32,7 +33,6 @@ export class LoginFormComponent implements OnInit {
     this.http.post('http://localhost:3000/logs/login', this.loginObj)
       .subscribe((res: Response) => {
         var temp = res.json();
-
         this.user.setToken(temp.token);
         if (temp.username == "admin@gslab.com") {
           this.user.setLog(this.model.uname);

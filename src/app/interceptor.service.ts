@@ -1,33 +1,44 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
-import {RequestOptions, Request, RequestMethod} from '@angular/http';
+import { Http, Headers } from '@angular/http';
+import { RequestOptions, Request, RequestMethod } from '@angular/http';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpResponse,
+  HttpErrorResponse
 } from '@angular/common/http';
-//import { AuthService } from './auth/auth.service';
+import { UserService } from './user.service';
 import { Observable } from 'rxjs/Observable';
+import decode from 'jwt-decode';
+import 'rxjs/add/operator/do';
+import { Router, NavigationExtras } from '@angular/router';
 
 
 @Injectable()
-export class InterceptorService implements HttpInterceptor{
+export class InterceptorService implements HttpInterceptor {
 
-  constructor() {}
-  
+  constructor(private user: UserService, private router: Router) { }
+
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    
+
     request = request.clone({
       setHeaders: {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.YWRtaW5AZ3NsYWIuY29t.01YKWEq5yogIUMCkLw3wCEa_6I8vQvQWWF-XDmj7UpQ'
+        Authorization: this.user.getToken()
       }
     });
 
-    console.log(request.headers)
-
-    return next.handle(request);
+    return next.handle(request).do((event: HttpEvent<any>) => {
+      if (event instanceof HttpResponse) {
+        if (event.body.token == 'invalid') {
+          this.user.removeToken();
+          this.user.logout();
+          this.router.navigate(["/"]);
+        }
+      }
+    })
   }
 }

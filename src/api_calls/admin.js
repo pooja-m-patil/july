@@ -1,8 +1,6 @@
-var express = require("express");
-var app = express();
+var app = require('./route');
 var cfenv = require("cfenv");
 var request = require("request");
-var bodyParser = require('body-parser');
 var conn = require('../admin_calls/conn');
 var addDev = require('../admin_calls/IOTDevice');
 var confirm = require('../admin_calls/confirmUserReq');
@@ -15,16 +13,17 @@ var req = require("request");
 var devData = require('../admin_calls/deviceDataUsage');
 var auth = require("./credentials");
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
+//Fetching all devices info along with connected user.
 app.get("/connections", function (request, response) {
   list.connList(function (data) {
     response.send({data});
   })
 })
 
-app.get("/connection-requests", function (request, response) {
+
+//To show user requests to admin.
+app.get("/user-connections", function (request, response) {
 
   console.log('requested conn');
   conn.getConnections(function (data) {
@@ -32,6 +31,7 @@ app.get("/connection-requests", function (request, response) {
   });
 })
 
+//Fetching devices.
 app.get("/ibm-devices", function (request, response) {
 
   addDev.getIOTDevice(function (data) {
@@ -39,6 +39,7 @@ app.get("/ibm-devices", function (request, response) {
   })
 })
 
+//Adding information about devices connected to users.
 app.post("/connections", function (request, response) {
 
   var uname = request.body.username;
@@ -76,7 +77,7 @@ app.post("/connections", function (request, response) {
   });
 })
 
-
+//Editing connection.
 app.patch("/connections", function (request, response) {
 
   var uname = request.body.username;
@@ -86,18 +87,12 @@ app.patch("/connections", function (request, response) {
   var dId = request.body.deviceId;
   var newDId = request.body.devId;
 
-  console.log(uname + " " + locname + " " + newDId);
-
   fetchDoc1.fetchDoc(dId, function (data1) {
-    console.log(data1);
     var devId = data1.docs[0]._id;
     var data = data1.docs[0].data;
 
     rev.getRevOfCnfDevices(lat, lng, function (data) {
 
-      console.log(data);
-      console.log(data._id);
-      console.log(data._rev);
       var options = {
         method: 'DELETE',
         url: auth.DBURL + 'confirmed_request/' + data._id,
@@ -107,8 +102,6 @@ app.patch("/connections", function (request, response) {
 
       req(options, function (error, res, body) {
         if (error) throw new Error(error);
-
-        console.log(body);
 
         confirm.confirmUserReq(newDId, data1, uname, locname, lat, lng, function (data) {
           response.send({data});
@@ -124,8 +117,9 @@ app.patch("/connections", function (request, response) {
 //   })
 // })
 
-
-app.get('/connected-devices', function (request, response) {
+//Displaying devices.
+app.get('/user-devices', function (request, response) {
+  console.log("devices");
   getDev.userConnDevices(function (data) {
     response.send({data});
   })

@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+var resHandler = require('./response-handler.js');
+var request = require("request");
 
 var prompt = require('prompt-sync')();
 var AssistantV1 = require('watson-developer-cloud/assistant/v1');
@@ -15,6 +17,7 @@ var workspace_id = 'fd970b5d-c53d-4ced-b0ca-517efc5d8f0c'; // workspace ID
 
 app.get("/assistants", function (request, res) {
 
+    console.log("get assistants");
     service.message({
         workspace_id: workspace_id
     }, processResponse);
@@ -28,7 +31,7 @@ app.get("/assistants", function (request, res) {
 
         if (response.output.text.length != 0) {
             console.log(response.output.text[0]);
-            res.send(response.output.text[0]);
+            res.send({data:response.output.text[0]});
         }
     }
 })
@@ -58,23 +61,20 @@ app.post("/assistants", function (request, res) {
                 console.log(JSON.stringify(response, null, 2));
                 console.log(response.output.text[0]);
                 txt = response.context;
-                res.send(response.output.text[0]);
+                res.send({data:response.output.text[0]});
             }
         }
         else {
             console.log("Err");
-            res.send("Error");
+            res.send({data:"Error"});
         }
     }
 });
 
-app.post("/discovery", function (request, res) {
+app.post("/discovery", function (req, res) {
 
     console.log("Watson discovery");
-    var input = request.body.msg;
-    var request = require("request");
-
-    var request = require("request");
+    var input = req.body.msg;
 
     var options = { method: 'GET',
       url: 'https://gateway.watsonplatform.net/discovery/api/v1/environments/37f17fbd-8d85-42e1-b847-df0762d9da65/collections/f214a2af-57fe-4a85-91f5-2cd616456a5e/query',
@@ -90,11 +90,12 @@ app.post("/discovery", function (request, res) {
       body: { name: 'mycoll' },
       json: true };
     
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-        res.send(response.body);
-    });
-
+      let data = resHandler.restClient(options);
+      data.then((msg)=>{
+        res.send(msg)
+      },(error)=>{
+        res.send(error);
+    })
 })
 
 

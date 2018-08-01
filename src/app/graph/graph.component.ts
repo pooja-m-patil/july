@@ -51,12 +51,10 @@ export class GraphComponent implements OnInit {
     this.selectedAreaItems = [];
     this.http.get("http://localhost:3000/apis/mappings").subscribe(res => {
       var temp1 = JSON.parse(JSON.stringify(res));
-      console.log(temp1);
       for (let i = 0, c = 0, m = 0; i < 4; i++) {
         var dbcity = temp1.data.docs[i].city;
         for (let j = 0; j < this.selectedCityItems.length; j++) {
           if (this.selectedCityItems[j] == dbcity) {
-            console.log("db")
             this.iscity = true;
             this.ref[c] = temp1.data.docs[i]._id;
             c++;
@@ -80,14 +78,12 @@ export class GraphComponent implements OnInit {
     this.myarray = new Array;
     this.dbData=[];
 
-    console.log(e);
     var d11 = new Date(e.d1);
     var d22 = new Date(e.d2);
    
     this.date1 = d11.toISOString();
+    d22.setHours(23,59,59,999);
     this.date2 = d22.toISOString();
-
-    console.log(this.selectedAreaItems);
 
     for (let n = 0; n < this.selectedAreaItems.length; n++) {
       this.myarray[n] = new Array(4);
@@ -97,25 +93,32 @@ export class GraphComponent implements OnInit {
 
       this.http.get("http://localhost:3000/apis/graphs/"+this.selectedAreaItems[a]+"?date1="+this.date1+"&date2="+this.date2).subscribe(res => {
 
+        console.log(res);
         this.totalLength++;
         var temp = JSON.parse(JSON.stringify(res));
         var j=0,t;
 
+        if(temp.data.bookmark=='nil'){
+          if (confirm("No record present for this date range")) {
+            
+          }
+        }
+        else{
+
         
-        this.dbData[this.dbFetch++]=temp.data;
+        this.dbData[this.dbFetch++]=temp.data.docs;
               
         if(this.date.length){
-          var len=this.date.length+temp.data.length;
+          var len=this.date.length+temp.data.docs.length;
           for(let i=this.date.length;i<len;i++){
-            this.date[i]=temp.data[j].timestamp;
+            this.date[i]=temp.data.docs[j].timestamp;
             j++;
           }
         }
         else{
-          for (t = 0; t < temp.data.length; t++) {
-            this.date[t] = temp.data[t].timestamp;
+          for (t = 0; t < temp.data.docs.length; t++) {
+            this.date[t] = temp.data.docs[t].timestamp;
           }
-
         }
 
         this.date.sort();
@@ -129,17 +132,24 @@ export class GraphComponent implements OnInit {
                 {
                   if(this.date[i]==this.dbData[b][k].timestamp)
                   {
-                    this.myarray[b][i] = this.dbData[b][k].usage;
+                      this.myarray[b][i] = this.dbData[b][k].usage;
                   }
                 }
-            }
+              }
             this.chartData2.push({ data: this.myarray[b], label: this.graphLabel[b] });
             this.status++;
-            
-          }
+            }
         }
-      })
-     
+        for(let b=0;b<this.dbData.length;b++){
+            for(let i=0;i<this.myarray[b].length;i++)
+            {
+              if(this.myarray[b][i]==undefined){
+                  this.myarray[b][i] = this.myarray[b][i-1];
+                }
+            }
+        }
+      }
+      })  
     }
   }    
 
@@ -148,6 +158,7 @@ export class GraphComponent implements OnInit {
 
     this.http.get("http://localhost:3000/apis/cities").subscribe(res => {
       var temp = JSON.parse(JSON.stringify(res));
+      console.log(temp);
       for (let i = 0; i < 3; i++) {
         this.arrcity[i] = temp.data.rows[i].doc.city;
       }

@@ -45,7 +45,6 @@ export class MappingDevicesComponent implements OnInit {
 
     this.http.post("http://localhost:3000/admin-apis/connections", this.confirmObj).subscribe((res: Response) => {
     var temp=JSON.parse(JSON.stringify(res)); 
-    console.log(temp); 
     if (temp.data.ok == true) {
         this.msg = "Device Successfully Registered";
 
@@ -65,7 +64,7 @@ export class MappingDevicesComponent implements OnInit {
       for (let i = 0; i < temp.data.docs.length; i++) {
         this.iotDevices[i] = temp.data.docs[i]._id;
       }
-      this.http.get("http://localhost:3000/admin-apis/connected-devices").subscribe((res: Response) => {
+      this.http.get("http://localhost:3000/admin-apis/user-devices").subscribe((res: Response) => {
         var temp = JSON.parse(JSON.stringify(res));
         for (let i = 0; i < temp.data.docs.length; i++) {
           this.userRegDevices[i] = temp.data.docs[i]._id;
